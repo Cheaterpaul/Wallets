@@ -1,0 +1,12 @@
+{
+  "item.wallets.wallet": "Wallet",
+  "item.wallets.coin_one": "1 Coin",
+  "item.wallets.coin_five": "5 Coins",
+  "item.wallets.coin_twenty": "20 Coins",
+  "item.wallets.coin_fifty": "50 Coins",
+  "item.wallets.coin_one_hundred": "100 Coins",
+  "item.wallets.coin_five_hundred": "500 Coins",
+  "container.wallets.wallet": "Wallet",
+  "text.wallets.wallet.stored": "%s Coins Stored",
+  "itemGroup.wallets": "Wallets"
+}
