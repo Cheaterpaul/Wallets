@@ -79,7 +79,7 @@ public class WalletsMod
             registry.register(new CoinItem(CoinItem.CoinValue.FIFTY, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_fifty"));
             registry.register(new CoinItem(CoinItem.CoinValue.ONE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_one_hundred"));
             registry.register(new CoinItem(CoinItem.CoinValue.FIVE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_five_hundred"));
-            registry.register(new WalletItem(new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "wallet"));
+            registry.register(new WalletItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)).setRegistryName(REFERENCE.MOD_ID, "wallet"));
         }
 
         @SubscribeEvent

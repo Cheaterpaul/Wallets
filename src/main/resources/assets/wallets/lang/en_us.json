@@ -8,5 +8,8 @@
   "item.wallets.coin_five_hundred": "500 Coins",
   "container.wallets.wallet": "Wallet",
   "text.wallets.wallet.stored": "%s Coins Stored",
-  "itemGroup.wallets": "Wallets"
+  "itemGroup.wallets": "Wallets",
+  "text.wallets.take": "Take a %s Coin",
+  "text.wallets.sum_amount": "Total value: %s",
+  "text.wallets.transfer": "Insert %s Coins"
 }

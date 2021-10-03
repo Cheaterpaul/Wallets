@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -37,7 +38,7 @@ public class WalletItem extends Item {
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> components, @Nonnull ITooltipFlag tooltipFlag) {
         int value = getCoinValue(stack);
-        components.add(new TranslationTextComponent("text.wallets.wallet.stored", value));
+        components.add(new TranslationTextComponent("text.wallets.wallet.stored", value).withStyle(TextFormatting.DARK_GRAY));
     }
 
     public static int getCoinValue(ItemStack stack) {

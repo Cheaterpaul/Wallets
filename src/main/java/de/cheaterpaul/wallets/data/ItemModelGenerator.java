@@ -7,8 +7,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.util.Locale;
-
 public class ItemModelGenerator extends ItemModelProvider {
 
     public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -18,8 +16,8 @@ public class ItemModelGenerator extends ItemModelProvider {
     @Override
     protected void registerModels() {
         CoinItem.getAllCoins().forEach(coin -> {
-            withExistingParent(coin.getRegistryName().toString(), modLoc("item/"+ coin.getCoinValue().toString().toLowerCase(Locale.ROOT)));
+            withExistingParent(coin.getRegistryName().toString(), mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + coin.getRegistryName().getPath());
         });
-        withExistingParent(WalletsMod.wallet_item.getRegistryName().toString(), modLoc("item/wallet_item"));
+        withExistingParent(WalletsMod.wallet_item.getRegistryName().toString(),mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + WalletsMod.wallet_item.getRegistryName().getPath());
     }
 }

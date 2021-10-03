@@ -1,9 +1,18 @@
 package de.cheaterpaul.wallets.items;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CoinItem extends Item {
@@ -25,6 +34,12 @@ public class CoinItem extends Item {
         super(properties);
         this.coinValue = coinValue;
         coinMap.put(coinValue, this);
+    }
+
+    @Override
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag tooltipFlag) {
+        int sum = stack.getCount() * ((CoinItem) stack.getItem()).getValue();
+        list.add(new TranslationTextComponent("text.wallets.sum_amount", sum).withStyle(TextFormatting.DARK_GRAY));
     }
 
     public int getValue() {
