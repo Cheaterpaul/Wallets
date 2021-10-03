@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WalletItem extends Item {
+public class WalletItem extends Item implements ICoinContainer {
 
     public WalletItem(Properties properties) {
         super(properties);
@@ -39,6 +39,26 @@ public class WalletItem extends Item {
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> components, @Nonnull ITooltipFlag tooltipFlag) {
         int value = getCoinValue(stack);
         components.add(new TranslationTextComponent("text.wallets.wallet.stored", value).withStyle(TextFormatting.DARK_GRAY));
+    }
+
+    @Override
+    public int getCoins(ItemStack stack) {
+        return getCoinValue(stack);
+    }
+
+    @Override
+    public boolean isCoin() {
+        return false;
+    }
+
+    @Override
+    public boolean containsCoins() {
+        return true;
+    }
+
+    @Override
+    public void clear(ItemStack stack) {
+        setCoinValue(stack, 0);
     }
 
     public static int getCoinValue(ItemStack stack) {

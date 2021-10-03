@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CoinItem extends Item {
+public class CoinItem extends Item implements ICoinContainer {
 
     private static final Map<CoinValue, CoinItem> coinMap = new HashMap<>(CoinValue.values().length, 1);
 
@@ -38,16 +38,23 @@ public class CoinItem extends Item {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag tooltipFlag) {
-        int sum = stack.getCount() * ((CoinItem) stack.getItem()).getValue();
+        int sum = ((ICoinContainer) stack.getItem()).getCoins(stack);
         list.add(new TranslationTextComponent("text.wallets.sum_amount", sum).withStyle(TextFormatting.DARK_GRAY));
     }
 
-    public int getValue() {
-        return this.coinValue.getValue();
+    @Override
+    public int getCoins(ItemStack stack) {
+        return stack.getCount() * this.coinValue.getValue();
     }
 
-    public CoinValue getCoinValue() {
-        return this.coinValue;
+    @Override
+    public boolean isCoin() {
+        return true;
+    }
+
+    @Override
+    public boolean containsCoins() {
+        return false;
     }
 
     public enum CoinValue {

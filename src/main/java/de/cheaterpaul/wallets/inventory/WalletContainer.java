@@ -2,6 +2,7 @@ package de.cheaterpaul.wallets.inventory;
 
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.items.CoinItem;
+import de.cheaterpaul.wallets.items.ICoinContainer;
 import de.cheaterpaul.wallets.items.WalletItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -50,23 +51,23 @@ public class WalletContainer extends Container {
 
     protected void addSlots(IInventory inventory) {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof CoinItem || stack.getItem() instanceof WalletItem));
-        this.addSlot(new CoinSlot(inventory, 1, 51, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 2, 69, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 3, 87, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 4, 105, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 5, 123, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 6, 141, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 1, 51+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 2, 69+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 3, 87+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 4, 105+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 5, 123+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 6, 141+20, 60, (value) -> false));
     }
 
     protected void addPlayerSlots(PlayerInventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 95 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 6+8 + j * 18, 95 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new WalletSafeSlot(playerInventory, k, 8 + k * 18, 153));
+            this.addSlot(new WalletSafeSlot(playerInventory, k, 6+8 + k * 18, 153));
         }
     }
 
@@ -118,12 +119,10 @@ public class WalletContainer extends Container {
     public void insertCoin() {
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
-            int amount = WalletItem.getCoinValue(this.walletStack);
-            if (stack.getItem() instanceof WalletItem) {
-                amount += WalletItem.getCoinValue(stack);
-                WalletItem.setCoinValue(stack,0);
-            } else if (stack.getItem() instanceof CoinItem) {
-                amount += (((CoinItem) stack.getItem()).getValue() * stack.getCount());
+            int amount = WalletItem.getCoinValue(this.walletStack) + (((ICoinContainer) stack.getItem()).getCoins(stack));
+            if ((((ICoinContainer) stack.getItem()).containsCoins())) {
+                (((ICoinContainer) stack.getItem())).clear(stack);
+            } else if (((ICoinContainer) stack.getItem()).isCoin()) {
                 this.inventory.setItem(0, ItemStack.EMPTY);
             }
             WalletItem.setCoinValue(this.walletStack, amount);
