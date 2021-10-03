@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="LGPL-3.0"
+issueTrackerURL = "https://github.com/Cheaterpaul/Wallets/issues"
+[[mods]]
+modId="wallets"
+version="${version}"
+displayName="Wallets"
+logoFile="logo.png"
+#credits="Thanks for this example mod goes to Java"
+authors="Cheaterpaul"
+description='''
+This mod add 2 item:
+
+Coins of different value and a wallet to store coins easily.
+'''
+[[dependencies.wallets]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.wallets]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
