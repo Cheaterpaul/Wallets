@@ -1,5 +1,6 @@
 package de.cheaterpaul.wallets.inventory;
 
+import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.CoinPouchItem;
@@ -10,9 +11,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
@@ -52,12 +55,12 @@ public class WalletContainer extends Container {
 
     protected void addSlots(IInventory inventory) {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
-        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60));
-        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60));
-        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60));
-        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60));
-        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60));
-        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
+        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
+        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
+        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
+        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
+        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
     protected void addPlayerSlots(PlayerInventory playerInventory) {

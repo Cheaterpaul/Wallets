@@ -3,6 +3,7 @@ package de.cheaterpaul.wallets.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
+import de.cheaterpaul.wallets.config.Config;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
@@ -22,9 +23,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Optional;
-import java.util.function.Function;
 
 import static de.cheaterpaul.wallets.network.InputEventPacket.*;
 
@@ -68,11 +67,13 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
                 renderTooltip(stack, new TranslationTextComponent("text.wallets.take", value), mouseX, mouseY);
             });
         }, StringTextComponent.EMPTY));
-        this.addButton(new ImageButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, (button, stack, mouseX, mouseY) -> {
-            getSum().ifPresent(value -> {
-                renderTooltip(stack, new TranslationTextComponent("text.wallets.create_pouch", value), mouseX, mouseY);
-            });
-        }, StringTextComponent.EMPTY));
+        if (!Config.CONFIG.disableCoinPouch.get()) {
+            this.addButton(new ImageButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, (button, stack, mouseX, mouseY) -> {
+                getSum().ifPresent(value -> {
+                    renderTooltip(stack, new TranslationTextComponent("text.wallets.create_pouch", value), mouseX, mouseY);
+                });
+            }, StringTextComponent.EMPTY));
+        }
         this.sumField = new NumberOnlyTextFieldWidget(this.font, this.leftPos + 52, this.topPos + 19, 84, 9, new TranslationTextComponent("text.wallets.take_coin_sum"));
         this.sumField.setMaxLength(13);
         this.sumField.setValue("");

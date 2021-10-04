@@ -1,6 +1,7 @@
 package de.cheaterpaul.wallets;
 
 import de.cheaterpaul.wallets.client.core.ModScreens;
+import de.cheaterpaul.wallets.config.Config;
 import de.cheaterpaul.wallets.data.ItemModelGenerator;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
@@ -36,6 +37,7 @@ public class WalletsMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
+        Config.init();
     }
 
     private void gatherData(final GatherDataEvent event) {
