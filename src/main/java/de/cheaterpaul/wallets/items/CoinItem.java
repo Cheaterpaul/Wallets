@@ -48,7 +48,7 @@ public class CoinItem extends Item implements ICoinContainer {
     }
 
     @Override
-    public boolean isCoin() {
+    public boolean removedOnUsage() {
         return true;
     }
 

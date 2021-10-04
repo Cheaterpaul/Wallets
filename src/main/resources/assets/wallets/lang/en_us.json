@@ -10,6 +10,8 @@
   "text.wallets.wallet.stored": "%s Coins Stored",
   "itemGroup.wallets": "Wallets",
   "text.wallets.take": "Take a %s Coin",
+  "text.wallets.create_pouch": "Create %s Coin Pouch",
   "text.wallets.sum_amount": "Total value: %s",
-  "text.wallets.transfer": "Insert %s Coins"
+  "text.wallets.transfer": "Insert %s Coins",
+  "item.wallets.coin_pouch": "%s Coins"
 }

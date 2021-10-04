@@ -4,6 +4,7 @@ import de.cheaterpaul.wallets.client.core.ModScreens;
 import de.cheaterpaul.wallets.data.ItemModelGenerator;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
+import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.WalletItem;
 import de.cheaterpaul.wallets.network.ModPacketDispatcher;
 import net.minecraft.data.DataGenerator;
@@ -65,6 +66,8 @@ public class WalletsMod
     public static final CoinItem coin_one = getNull();
     @ObjectHolder(REFERENCE.MOD_ID+":wallet")
     public static final WalletItem wallet_item = getNull();
+    @ObjectHolder(REFERENCE.MOD_ID+":coin_pouch")
+    public static final CoinPouchItem coin_pouch = getNull();
     @ObjectHolder(REFERENCE.MOD_ID+":wallet")
     public static final ContainerType<WalletContainer> wallet_container = getNull();
 
@@ -79,6 +82,7 @@ public class WalletsMod
             registry.register(new CoinItem(CoinItem.CoinValue.FIFTY, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_fifty"));
             registry.register(new CoinItem(CoinItem.CoinValue.ONE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_one_hundred"));
             registry.register(new CoinItem(CoinItem.CoinValue.FIVE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_five_hundred"));
+            registry.register(new CoinPouchItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)).setRegistryName(REFERENCE.MOD_ID, "coin_pouch"));
             registry.register(new WalletItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)).setRegistryName(REFERENCE.MOD_ID, "wallet"));
         }
 

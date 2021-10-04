@@ -16,13 +16,15 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 import static de.cheaterpaul.wallets.network.InputEventPacket.*;
 
@@ -61,13 +63,15 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         this.addButton(new AddWalletButton(this.getGuiLeft() + 106+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), StringTextComponent.EMPTY, CoinItem.CoinValue.FIFTY));
         this.addButton(new AddWalletButton(this.getGuiLeft() + 124+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE_HUNDRED));
         this.addButton(new AddWalletButton(this.getGuiLeft() + 142+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.FIVE_HUNDRED));
-        this.addButton(new ImageButton(this.getGuiLeft() + 142, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
-            try {
-                int amount = sumField.getValue().equals("") ? 0 : Integer.parseInt(sumField.getValue());
-                renderTooltip(stack, new TranslationTextComponent("text.wallets.take", amount), mouseX, mouseY);
-            } catch (NumberFormatException ignored) {
-
-            }
+        this.addButton(new ImageButton(this.getGuiLeft() + 142+2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
+            getSum().ifPresent(value -> {
+                renderTooltip(stack, new TranslationTextComponent("text.wallets.take", value), mouseX, mouseY);
+            });
+        }, StringTextComponent.EMPTY));
+        this.addButton(new ImageButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, (button, stack, mouseX, mouseY) -> {
+            getSum().ifPresent(value -> {
+                renderTooltip(stack, new TranslationTextComponent("text.wallets.create_pouch", value), mouseX, mouseY);
+            });
         }, StringTextComponent.EMPTY));
         this.sumField = new NumberOnlyTextFieldWidget(this.font, this.leftPos + 52, this.topPos + 19, 84, 9, new TranslationTextComponent("text.wallets.take_coin_sum"));
         this.sumField.setMaxLength(13);
@@ -115,11 +119,29 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
     }
 
     private void walletSumCoinsPressed(Button b) {
-        long value = Long.parseLong(this.sumField.getValue());
-        if (value > this.menu.getWalletAmount()) {
-            this.sumField.setTextColor(Color.parseColor("RED").getValue());
-        } else {
-            WalletsMod.dispatcher.sentToServer(new InputEventPacket(TAKE_COINS, String.valueOf((int) value)));
+        getSum().ifPresent(value -> {
+            if (value <= this.menu.getWalletAmount()) {
+                WalletsMod.dispatcher.sentToServer(new InputEventPacket(TAKE_COINS, value.toString()));
+            }
+        });
+    }
+
+    private void walletCreateCoinPoach(Button b) {
+        getSum().ifPresent(value -> {
+            if (value <= this.menu.getWalletAmount()) {
+                WalletsMod.dispatcher.sentToServer(new InputEventPacket(CREATE_POUCH, value.toString()));
+            }
+        });
+
+    }
+
+    private Optional<Long> getSum() {
+        try {
+            String val = this.sumField.getValue();
+            long value = val.equals("") ? 0 : Long.parseLong(val);
+            return Optional.of(value);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
         }
     }
 
@@ -171,7 +193,7 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         }
     }
 
-    private static class NumberOnlyTextFieldWidget extends TextFieldWidget {
+    private class NumberOnlyTextFieldWidget extends TextFieldWidget {
 
         public NumberOnlyTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
             super(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, p_i232260_6_);
@@ -184,11 +206,43 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         @Override
         public void insertText(@Nonnull String input) {
             try {
-                this.setTextColor(14737632);
                 int value = Integer.parseInt(input);
                 super.insertText(input);
+                if (Long.parseLong(this.getValue()) > menu.getWalletAmount()) {
+                    this.setTextColor(16733525);
+                } else {
+                    this.setTextColor(14737632);
+                }
             } catch (NumberFormatException ignored) {
 
+            }
+        }
+
+        @Override
+        public void deleteChars(int p_146175_1_) {
+            super.deleteChars(p_146175_1_);
+            try {
+                if (Long.parseLong(this.getValue()) > menu.getWalletAmount()) {
+                    this.setTextColor(16733525);
+                } else {
+                    this.setTextColor(14737632);
+                }
+            } catch (NumberFormatException ignored) {
+                this.setTextColor(14737632);
+            }
+        }
+
+        @Override
+        public void deleteWords(int p_146177_1_) {
+            super.deleteWords(p_146177_1_);
+            try {
+            if (Long.parseLong(this.getValue()) > menu.getWalletAmount()) {
+                this.setTextColor(16733525);
+            } else {
+                this.setTextColor(14737632);
+            }
+            } catch (NumberFormatException ignored) {
+                this.setTextColor(14737632);
             }
         }
     }

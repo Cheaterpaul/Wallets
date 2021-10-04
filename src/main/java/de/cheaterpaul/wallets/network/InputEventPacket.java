@@ -13,6 +13,7 @@ public class InputEventPacket {
     public static final String INSERT_COIN = "ic";
     public static final String TAKE_COIN = "tc";
     public static final String TAKE_COINS = "tcs";
+    public static final String CREATE_POUCH = "cp";
     public static final String UPDATE_WALLET = "uw";
     public static final String UPDATE_WALLET_TAKE = "uwt";
 
@@ -63,6 +64,9 @@ public class InputEventPacket {
                     break;
                 case TAKE_COINS:
                     ((WalletContainer) menu).takeCoins(Integer.parseInt(msg.param));
+                    break;
+                case CREATE_POUCH:
+                    ((WalletContainer) menu).createPouch(Integer.parseInt(msg.param));
                     break;
             }
         }

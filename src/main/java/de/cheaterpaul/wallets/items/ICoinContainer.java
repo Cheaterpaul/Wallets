@@ -9,7 +9,7 @@ public interface ICoinContainer {
     default void clear(ItemStack stack) {
     }
 
-    boolean isCoin();
+    boolean removedOnUsage();
 
     int getCoins(ItemStack stack);
 }

@@ -2,6 +2,7 @@ package de.cheaterpaul.wallets.inventory;
 
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.items.CoinItem;
+import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
 import de.cheaterpaul.wallets.items.WalletItem;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,13 +51,13 @@ public class WalletContainer extends Container {
     }
 
     protected void addSlots(IInventory inventory) {
-        this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof CoinItem || stack.getItem() instanceof WalletItem));
-        this.addSlot(new CoinSlot(inventory, 1, 51+20, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 2, 69+20, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 3, 87+20, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 4, 105+20, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 5, 123+20, 60, (value) -> false));
-        this.addSlot(new CoinSlot(inventory, 6, 141+20, 60, (value) -> false));
+        this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
+        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60));
+        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60));
     }
 
     protected void addPlayerSlots(PlayerInventory playerInventory) {
@@ -119,26 +120,21 @@ public class WalletContainer extends Container {
     public void insertCoin() {
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
-            int amount = WalletItem.getCoinValue(this.walletStack) + (((ICoinContainer) stack.getItem()).getCoins(stack));
             if ((((ICoinContainer) stack.getItem()).containsCoins())) {
                 (((ICoinContainer) stack.getItem())).clear(stack);
-            } else if (((ICoinContainer) stack.getItem()).isCoin()) {
+            } else if (((ICoinContainer) stack.getItem()).removedOnUsage()) {
                 this.inventory.setItem(0, ItemStack.EMPTY);
             }
-            WalletItem.setCoinValue(this.walletStack, amount);
-            this.walletAmount.set(WalletItem.getCoinValue(this.walletStack));
-            broadcastChanges();
+            addWalletCoins((((ICoinContainer) stack.getItem()).getCoins(stack)));
         }
     }
 
     public void takeCoin(CoinItem.CoinValue value) {
         int amount = value.getValue();
         if (WalletItem.getCoinValue(this.walletStack) >= amount) {
-            WalletItem.setCoinValue(this.walletStack, WalletItem.getCoinValue(this.walletStack) - amount);
             _takeCoin(value, 1);
+            addWalletCoins(-amount);
         }
-        this.walletAmount.set(WalletItem.getCoinValue(this.walletStack));
-        broadcastChanges();
     }
 
     private void _takeCoin(CoinItem.CoinValue value, int amount) {
@@ -163,7 +159,21 @@ public class WalletContainer extends Container {
             remaining -= amount * v.getValue();
             _takeCoin(v, amount);
         }
-        WalletItem.setCoinValue(this.walletStack, WalletItem.getCoinValue(this.walletStack) - value);
+        addWalletCoins(-value);
+    }
+
+    public void createPouch(int value) {
+        if (value <= 0) return;
+        if (value > WalletItem.getCoinValue(this.walletStack)) {
+            value = WalletItem.getCoinValue(this.walletStack);
+        }
+        ItemStack stack = CoinPouchItem.createPouch(value);
+        addWalletCoins(-value);
+        this.player.inventory.placeItemBackInInventory(this.player.level, stack);
+    }
+
+    private void addWalletCoins(int amount) {
+        WalletItem.setCoinValue(this.walletStack, WalletItem.getCoinValue(this.walletStack) + amount);
         this.walletAmount.set(WalletItem.getCoinValue(this.walletStack));
         broadcastChanges();
     }
@@ -192,9 +202,6 @@ public class WalletContainer extends Container {
         @Override
         public void setChanged() {
             super.setChanged();
-            if (!player.level.isClientSide) {
-//                player.closeContainer();
-            }
         }
     }
     public static class CoinSlot extends Slot {
@@ -211,5 +218,16 @@ public class WalletContainer extends Container {
             return predicate.test(itemStack);
         }
 
+    }
+    public static class TakeOnlySlot extends Slot {
+
+        public TakeOnlySlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_) {
+            super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack p_75214_1_) {
+            return false;
+        }
     }
 }
