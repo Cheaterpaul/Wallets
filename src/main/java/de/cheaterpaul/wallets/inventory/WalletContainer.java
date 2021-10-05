@@ -123,12 +123,13 @@ public class WalletContainer extends Container {
     public void insertCoin() {
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
+            int coin_value = (((ICoinContainer) stack.getItem()).getCoins(stack));
             if ((((ICoinContainer) stack.getItem()).containsCoins())) {
                 (((ICoinContainer) stack.getItem())).clear(stack);
             } else if (((ICoinContainer) stack.getItem()).removedOnUsage()) {
                 this.inventory.setItem(0, ItemStack.EMPTY);
             }
-            addWalletCoins((((ICoinContainer) stack.getItem()).getCoins(stack)));
+            addWalletCoins(coin_value);
         }
     }
 
