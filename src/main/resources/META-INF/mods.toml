@@ -7,8 +7,7 @@ modId="wallets"
 version="${version}"
 displayName="Wallets"
 logoFile="logo.png"
-#credits="Thanks for this example mod goes to Java"
-authors="Cheaterpaul"
+authors="Cheaterpaul, 1LiterZinalco"
 description='''
 This mod add 2 item:
 
