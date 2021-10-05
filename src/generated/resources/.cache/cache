@@ -6,3 +6,5 @@ c76efb834ded01a123ef8fe275e27c36722e3cf4 assets/wallets/models/item/coin_one_hun
 54e9eecdeae13d4bfb37eacaefd436669fd4e8d8 assets/wallets/models/item/coin_pouch.json
 65e9758b973f15e2f2ce57d6a7bd658561b3f91c assets/wallets/models/item/coin_twenty.json
 fef5229b4b6461f0645f7f2605f1f730d0a49d13 assets/wallets/models/item/wallet.json
+afbe371baf362cc3767adb6e3862cf753f14b687 data/wallets/advancements/recipes/wallets/wallet.json
+a79da81a6efe10b59c7252f944e771e78e876201 data/wallets/recipes/wallet.json

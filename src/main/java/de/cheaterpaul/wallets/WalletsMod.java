@@ -3,6 +3,7 @@ package de.cheaterpaul.wallets;
 import de.cheaterpaul.wallets.client.core.ModScreens;
 import de.cheaterpaul.wallets.config.Config;
 import de.cheaterpaul.wallets.data.ItemModelGenerator;
+import de.cheaterpaul.wallets.data.RecipeGenerator;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.CoinPouchItem;
@@ -45,6 +46,7 @@ public class WalletsMod
         if (event.includeClient()) {
             gen.addProvider(new ItemModelGenerator(gen, event.getExistingFileHelper()));
         }
+        gen.addProvider(new RecipeGenerator(gen));
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
