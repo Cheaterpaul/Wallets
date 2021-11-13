@@ -22,9 +22,13 @@ public class ModPacketDispatcher {
 
     public void registerPackets() {
         dispatcher.registerMessage(nextID(), InputEventPacket.class, InputEventPacket::encode, InputEventPacket::decode, InputEventPacket::handle);
+        dispatcher.registerMessage(nextID(), TakeCoinPacket.class, TakeCoinPacket::encode, TakeCoinPacket::decode, TakeCoinPacket::handle);
     }
 
     public void sentToServer(InputEventPacket packet){
+        this.dispatcher.sendToServer(packet);
+    }
+    public void sentToServer(TakeCoinPacket packet){
         this.dispatcher.sendToServer(packet);
     }
 }

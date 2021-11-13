@@ -9,6 +9,7 @@ import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
 import de.cheaterpaul.wallets.network.InputEventPacket;
+import de.cheaterpaul.wallets.network.TakeCoinPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -60,13 +61,13 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
                 renderTooltip(stack, new TranslationTextComponent("text.wallets.transfer", amount), mouseX, mouseY);
             }
         }, StringTextComponent.EMPTY));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 52 +20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 70+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE), StringTextComponent.EMPTY, CoinItem.CoinValue.FIVE));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 88+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.TWENTY), StringTextComponent.EMPTY, CoinItem.CoinValue.TWENTY));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 106+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), StringTextComponent.EMPTY, CoinItem.CoinValue.FIFTY));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 124+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE_HUNDRED));
-        this.addButton(new AddWalletButton(this.getGuiLeft() + 142+20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.FIVE_HUNDRED));
-        this.addButton(new ImageButton(this.getGuiLeft() + 142+2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE));
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE), StringTextComponent.EMPTY, CoinItem.CoinValue.FIVE));
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.TWENTY), StringTextComponent.EMPTY, CoinItem.CoinValue.TWENTY));
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), StringTextComponent.EMPTY, CoinItem.CoinValue.FIFTY));
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE_HUNDRED));
+        this.addButton(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), StringTextComponent.EMPTY, CoinItem.CoinValue.FIVE_HUNDRED));
+        this.addButton(new ImageButton(this.getGuiLeft() + 142 + 2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
             getSum().ifPresent(value -> {
                 renderTooltip(stack, new TranslationTextComponent("text.wallets.take", value), mouseX, mouseY);
             });
@@ -119,8 +120,7 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
 
     private void walletTakeCoinPressed(Button b) {
         AddWalletButton button = ((AddWalletButton) b);
-        WalletsMod.dispatcher.sentToServer(new InputEventPacket(TAKE_COIN, button.getValue().toString()));
-
+        WalletsMod.dispatcher.sentToServer(new TakeCoinPacket(button.getValue(), hasShiftDown() ? 64 : 1));
     }
 
     private void walletSumCoinsPressed(Button b) {
@@ -137,7 +137,7 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
             RenderSystem.enableDepthTest();
             RenderSystem.enableTexture();
             RenderSystem.enableBlend();
-            RenderSystem.color4f(1,1,1,0.2f);
+            RenderSystem.color4f(1, 1, 1, 0.2f);
             RenderSystem.colorMask(true, true, true, true);
             TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(((WalletContainer.TakeOnlySlot) slot).getTexture());
             this.minecraft.getTextureManager().bind(sprite.atlas().location());
@@ -214,6 +214,22 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         }
     }
 
+    public static class NoEditTextFieldWidget extends TextFieldWidget {
+
+        public NoEditTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
+            super(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, p_i232260_6_);
+        }
+
+        public NoEditTextFieldWidget(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable TextFieldWidget p_i232259_6_, ITextComponent p_i232259_7_) {
+            super(p_i232259_1_, p_i232259_2_, p_i232259_3_, p_i232259_4_, p_i232259_5_, p_i232259_6_, p_i232259_7_);
+        }
+
+        @Override
+        public boolean isFocused() {
+            return false;
+        }
+    }
+
     private class NumberOnlyTextFieldWidget extends TextFieldWidget {
 
         public NumberOnlyTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
@@ -257,30 +273,14 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         public void deleteWords(int p_146177_1_) {
             super.deleteWords(p_146177_1_);
             try {
-            if (Long.parseLong(this.getValue()) > menu.getWalletAmount()) {
-                this.setTextColor(16733525);
-            } else {
-                this.setTextColor(14737632);
-            }
+                if (Long.parseLong(this.getValue()) > menu.getWalletAmount()) {
+                    this.setTextColor(16733525);
+                } else {
+                    this.setTextColor(14737632);
+                }
             } catch (NumberFormatException ignored) {
                 this.setTextColor(14737632);
             }
-        }
-    }
-
-    public static class NoEditTextFieldWidget extends TextFieldWidget {
-
-        public NoEditTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
-            super(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, p_i232260_6_);
-        }
-
-        public NoEditTextFieldWidget(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable TextFieldWidget p_i232259_6_, ITextComponent p_i232259_7_) {
-            super(p_i232259_1_, p_i232259_2_, p_i232259_3_, p_i232259_4_, p_i232259_5_, p_i232259_6_, p_i232259_7_);
-        }
-
-        @Override
-        public boolean isFocused() {
-            return false;
         }
     }
 }

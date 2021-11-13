@@ -120,6 +120,7 @@ public class WalletContainer extends Container {
     }
 
     public void insertCoin() {
+        if (player.level.isClientSide) return;
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
             int coin_value = (((ICoinContainer) stack.getItem()).getCoins(stack));
@@ -133,11 +134,15 @@ public class WalletContainer extends Container {
     }
 
     public void takeCoin(CoinItem.CoinValue value) {
-        int amount = value.getValue();
-        if (WalletItem.getCoinValue(this.walletStack) >= amount) {
-            _takeCoin(value, 1);
-            addWalletCoins(-amount);
-        }
+        takeCoin(value,1);
+    }
+
+    public void takeCoin(CoinItem.CoinValue type, int amount) {
+        assert amount <= 64;
+        int coinValue = type.getValue();
+        int coins = Math.min(WalletItem.getCoinValue(this.walletStack) / coinValue, amount);
+        _takeCoin(type, coins);
+        addWalletCoins(-coins * coinValue);
     }
 
     private void _takeCoin(CoinItem.CoinValue value, int amount) {
@@ -166,10 +171,10 @@ public class WalletContainer extends Container {
     }
 
     public void createPouch(int value) {
-        if (value <= 0) return;
         if (value > WalletItem.getCoinValue(this.walletStack)) {
             value = WalletItem.getCoinValue(this.walletStack);
         }
+        if (value <= 0) return;
         ItemStack stack = CoinPouchItem.createPouch(value);
         addWalletCoins(-value);
         this.player.inventory.placeItemBackInInventory(this.player.level, stack);
