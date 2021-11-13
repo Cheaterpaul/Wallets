@@ -2,7 +2,7 @@
 
 # Wallets for Minecraft 1.16 - Forge
 
-[![](https://cf.way2muchnoise.eu/short_436934_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/wallets)
+[![](https://cf.way2muchnoise.eu/short_534011_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/wallets)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![](https://badgen.net/maven/v/metadata-url/https/maven.paube.de/releases/de/cheaterpaul/wallets/Wallets/maven-metadata.xml)](https://maven.paube.de/releases/de/cheaterpaul/wallets/Wallets)
 
