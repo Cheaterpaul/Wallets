@@ -1,6 +1,7 @@
 package de.cheaterpaul.wallets.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.config.Config;
@@ -14,7 +15,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -125,6 +129,22 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
                 WalletsMod.dispatcher.sentToServer(new InputEventPacket(TAKE_COINS, value.toString()));
             }
         });
+    }
+
+    @Override
+    public void renderSlot(@Nonnull MatrixStack stack, @Nonnull Slot slot) {
+        if (slot instanceof WalletContainer.TakeOnlySlot) {
+            RenderSystem.enableDepthTest();
+            RenderSystem.enableTexture();
+            RenderSystem.enableBlend();
+            RenderSystem.color4f(1,1,1,0.2f);
+            RenderSystem.colorMask(true, true, true, true);
+            TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(((WalletContainer.TakeOnlySlot) slot).getTexture());
+            this.minecraft.getTextureManager().bind(sprite.atlas().location());
+            blit(stack, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
+
+        }
+        super.renderSlot(stack, slot);
     }
 
     private void walletCreateCoinPoach(Button b) {

@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IntReferenceHolder;
@@ -55,12 +54,12 @@ public class WalletContainer extends Container {
 
     protected void addSlots(IInventory inventory) {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
-        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
-        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
-        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
-        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
-        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
-        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60).setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
+        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
+        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
+        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
+        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
+        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
+        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
     protected void addPlayerSlots(PlayerInventory playerInventory) {
@@ -225,13 +224,20 @@ public class WalletContainer extends Container {
     }
     public static class TakeOnlySlot extends Slot {
 
-        public TakeOnlySlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_) {
+        private ResourceLocation texture;
+
+        public TakeOnlySlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_, ResourceLocation texture) {
             super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
+            this.texture = texture;
         }
 
         @Override
-        public boolean mayPlace(ItemStack p_75214_1_) {
+        public boolean mayPlace(ItemStack itemStack) {
             return false;
+        }
+
+        public ResourceLocation getTexture() {
+            return texture;
         }
     }
 }
