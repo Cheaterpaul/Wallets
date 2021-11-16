@@ -15,7 +15,7 @@ The system works in a way that there are a few different coin item (1 coin, 5 co
 
 Interacting with the wallet opens a gui where coins or other wallets can be transferred into the opened wallet. In the gui every kind of coin can be extracted as well as a set coin value. And if that is too much you can even take a coin pile with a set amount of coins to transfer to another player or wallet.
 
-<img alt="wallet" src="https://i.ibb.co/nB238wn/wallet.png" width="500"/>
+<img alt="wallet" src="https://i.ibb.co/yygq6HR/wallets.png" width="500"/>
 
 ## Configuration
 
