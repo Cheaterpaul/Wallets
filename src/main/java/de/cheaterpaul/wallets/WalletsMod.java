@@ -10,10 +10,10 @@ import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.WalletItem;
 import de.cheaterpaul.wallets.network.ModPacketDispatcher;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -22,8 +22,8 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -59,7 +59,7 @@ public class WalletsMod
 
     public static final ModPacketDispatcher dispatcher = new ModPacketDispatcher();
 
-    public static final ItemGroup ITEM_GROUP = new ItemGroup("wallets") {
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab("wallets") {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -73,7 +73,7 @@ public class WalletsMod
     @ObjectHolder(REFERENCE.MOD_ID+":coin_pouch")
     public static final CoinPouchItem coin_pouch = getNull();
     @ObjectHolder(REFERENCE.MOD_ID+":wallet")
-    public static final ContainerType<WalletContainer> wallet_container = getNull();
+    public static final MenuType<WalletContainer> wallet_container = getNull();
 
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
@@ -91,9 +91,9 @@ public class WalletsMod
         }
 
         @SubscribeEvent
-        public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> event) {
-            IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
-            registry.register(new ContainerType<>(WalletContainer::new).setRegistryName(REFERENCE.MOD_ID, "wallet"));
+        public static void onContainerRegistry(final RegistryEvent.Register<MenuType<?>> event) {
+            IForgeRegistry<MenuType<?>> registry = event.getRegistry();
+            registry.register(new MenuType<>(WalletContainer::new).setRegistryName(REFERENCE.MOD_ID, "wallet"));
         }
     }
 

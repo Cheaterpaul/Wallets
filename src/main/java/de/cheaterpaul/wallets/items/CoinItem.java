@@ -1,12 +1,12 @@
 package de.cheaterpaul.wallets.items;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,9 +37,9 @@ public class CoinItem extends Item implements ICoinContainer {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag tooltipFlag) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> list, @Nonnull TooltipFlag tooltipFlag) {
         int sum = ((ICoinContainer) stack.getItem()).getCoins(stack);
-        list.add(new TranslationTextComponent("text.wallets.sum_amount", sum).withStyle(TextFormatting.DARK_GRAY));
+        list.add(new TranslatableComponent("text.wallets.sum_amount", sum).withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override

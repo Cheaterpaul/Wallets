@@ -6,42 +6,42 @@ import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
 import de.cheaterpaul.wallets.items.WalletItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
-public class WalletContainer extends Container {
+public class WalletContainer extends AbstractContainerMenu {
 
-    protected final IInventory inventory;
+    protected final Container inventory;
     private final ItemStack walletStack;
-    private final IntReferenceHolder walletAmount;
-    private final IntReferenceHolder walletPos;
-    private final PlayerEntity player;
+    private final DataSlot walletAmount;
+    private final DataSlot walletPos;
+    private final Player player;
 
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
-    public WalletContainer(int id, PlayerInventory playerInventory) {
+    public WalletContainer(int id, Inventory playerInventory) {
         this(id, playerInventory, ItemStack.EMPTY);
     }
 
-    public WalletContainer(int id, PlayerInventory playerInventory, ItemStack stack) {
+    public WalletContainer(int id, Inventory playerInventory, ItemStack stack) {
         super(WalletsMod.wallet_container, id);
         this.player = playerInventory.player;
         this.walletStack = stack;
-        this.inventory = new Inventory(7);
+        this.inventory = new SimpleContainer(7);
         this.addSlots(inventory);
         this.addPlayerSlots(playerInventory);
-        this.addDataSlot(this.walletAmount = IntReferenceHolder.standalone());
-        this.addDataSlot(this.walletPos = IntReferenceHolder.standalone());
+        this.addDataSlot(this.walletAmount = DataSlot.standalone());
+        this.addDataSlot(this.walletPos = DataSlot.standalone());
         this.walletAmount.set(WalletItem.getCoinValue(stack));
         if (!player.level.isClientSide) {
             this.walletPos.set(playerInventory.findSlotMatchingUnusedItem(stack));
@@ -52,7 +52,7 @@ public class WalletContainer extends Container {
         return this.walletAmount.get();
     }
 
-    protected void addSlots(IInventory inventory) {
+    protected void addSlots(Container inventory) {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
         this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
         this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
@@ -62,7 +62,7 @@ public class WalletContainer extends Container {
         this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
-    protected void addPlayerSlots(PlayerInventory playerInventory) {
+    protected void addPlayerSlots(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 6+8 + j * 18, 95 + i * 18));
@@ -77,7 +77,7 @@ public class WalletContainer extends Container {
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerEntity, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerEntity, int index) {
         int size = this.inventory.getContainerSize();
         ItemStack result = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -177,7 +177,7 @@ public class WalletContainer extends Container {
         if (value <= 0) return;
         ItemStack stack = CoinPouchItem.createPouch(value);
         addWalletCoins(-value);
-        this.player.inventory.placeItemBackInInventory(this.player.level, stack);
+        this.player.getInventory().placeItemBackInInventory(stack);
     }
 
     private void addWalletCoins(int amount) {
@@ -187,23 +187,23 @@ public class WalletContainer extends Container {
     }
 
     @Override
-    public void removed(@Nonnull PlayerEntity player) {
+    public void removed(@Nonnull Player player) {
         super.removed(player);
-        this.clearContainer(player, player.level, this.inventory);
+        this.clearContainer(player, this.inventory);
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity p_75145_1_) {
+    public boolean stillValid(@Nonnull Player p_75145_1_) {
         return true;
     }
 
     public class WalletSafeSlot extends Slot {
-        public WalletSafeSlot(IInventory inventory, int slot, int xPos, int yPos) {
+        public WalletSafeSlot(Container inventory, int slot, int xPos, int yPos) {
             super(inventory, slot, xPos, yPos);
         }
 
         @Override
-        public boolean mayPickup(@Nonnull PlayerEntity player) {
+        public boolean mayPickup(@Nonnull Player player) {
             return walletPos.get() != this.getSlotIndex();
         }
 
@@ -217,7 +217,7 @@ public class WalletContainer extends Container {
 
         private final Predicate<ItemStack> predicate;
 
-        public CoinSlot(IInventory inventory, int slot, int xPos, int yPos, Predicate<ItemStack> predicate) {
+        public CoinSlot(Container inventory, int slot, int xPos, int yPos, Predicate<ItemStack> predicate) {
             super(inventory, slot, xPos, yPos);
             this.predicate = predicate;
         }
@@ -231,7 +231,7 @@ public class WalletContainer extends Container {
 
         private ResourceLocation texture;
 
-        public TakeOnlySlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_, ResourceLocation texture) {
+        public TakeOnlySlot(Container p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_, ResourceLocation texture) {
             super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
             this.texture = texture;
         }
