@@ -24,7 +24,8 @@ Interacting with the wallet opens a gui where coins or other wallets can be tran
 ## People
 
 - [Cheaterpaul](https://paube.de) Coding
-- [1LiterZinalco](https://github.com/1LiterZinalco) Ideas & Textures
+- [1LiterZinalco](https://github.com/1LiterZinalco) Idea
+- Random Textures
 
 ## Links
 
