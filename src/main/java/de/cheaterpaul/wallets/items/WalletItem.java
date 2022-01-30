@@ -66,6 +66,9 @@ public class WalletItem extends Item implements ICoinContainer {
     }
 
     public static void setCoinValue(ItemStack stack, int newValue) {
+        if (newValue > 999999999) { // limit wallet amount to ensure right screen rendering
+            newValue = 999999999;
+        }
         stack.getOrCreateTag().putInt("coin_value", newValue);
     }
 

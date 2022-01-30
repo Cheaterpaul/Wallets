@@ -13,5 +13,6 @@
   "text.wallets.create_pouch": "Create %s Coin Pouch",
   "text.wallets.sum_amount": "Total value: %s",
   "text.wallets.transfer": "Insert %s Coins",
-  "item.wallets.coin_pouch": "%s Coins"
+  "item.wallets.coin_pouch": "%s Coins",
+  "text.wallets.wallet_full": "Wallet is full"
 }

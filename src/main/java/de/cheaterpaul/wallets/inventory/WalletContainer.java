@@ -128,6 +128,7 @@ public class WalletContainer extends Container {
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
             int coin_value = (((ICoinContainer) stack.getItem()).getCoins(stack));
+            if (getWalletAmount() + coin_value > 999999999) return; // limit wallet amount to ensure right screen rendering
             if ((((ICoinContainer) stack.getItem()).containsCoins())) {
                 (((ICoinContainer) stack.getItem())).clear(stack);
             } else if (((ICoinContainer) stack.getItem()).removedOnUsage()) {

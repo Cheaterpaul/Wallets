@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
@@ -58,7 +59,11 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
                 if (itemstack.getItem() instanceof ICoinContainer) {
                     amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
                 }
-                renderTooltip(stack, new TranslationTextComponent("text.wallets.transfer", amount), mouseX, mouseY);
+                ITextComponent text = new TranslationTextComponent("text.wallets.transfer", amount);
+                if (menu.getWalletAmount() + amount > 999999999) {
+                    text = new TranslationTextComponent("text.wallets.wallet_full").withStyle(TextFormatting.RED);
+                }
+                renderTooltip(stack, text, mouseX, mouseY);
             }
         }, StringTextComponent.EMPTY));
         this.addButton(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), StringTextComponent.EMPTY, CoinItem.CoinValue.ONE));
@@ -85,7 +90,7 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         this.sumField.setBordered(false);
         this.setInitialFocus(this.sumField);
         this.addWidget(this.sumField);
-        this.walletSum = new NoEditTextFieldWidget(this.font, this.leftPos + 8, this.topPos + 63, 32, 10, new TranslationTextComponent("text.wallets.wallet_sum"));
+        this.walletSum = new NoEditTextFieldWidget(this.font, this.leftPos + 8, this.topPos + 63, 55, 10, new TranslationTextComponent("text.wallets.wallet_sum"));
         this.walletSum.setMaxLength(10);
         this.walletSum.setBordered(false);
         this.walletSum.setEditable(false);
