@@ -17,6 +17,8 @@ import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class WalletContainer extends Container {
@@ -26,6 +28,7 @@ public class WalletContainer extends Container {
     private final IntReferenceHolder walletAmount;
     private final IntReferenceHolder walletPos;
     private final PlayerEntity player;
+    private final Map<CoinItem.CoinValue, TakeOnlySlot> coinSlots;
 
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
@@ -38,6 +41,7 @@ public class WalletContainer extends Container {
         this.player = playerInventory.player;
         this.walletStack = stack;
         this.inventory = new Inventory(7);
+        this.coinSlots = new HashMap<>();
         this.addSlots(inventory);
         this.addPlayerSlots(playerInventory);
         this.addDataSlot(this.walletAmount = IntReferenceHolder.standalone());
@@ -54,12 +58,12 @@ public class WalletContainer extends Container {
 
     protected void addSlots(IInventory inventory) {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
-        this.addSlot(new TakeOnlySlot(inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
-        this.addSlot(new TakeOnlySlot(inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
-        this.addSlot(new TakeOnlySlot(inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
-        this.addSlot(new TakeOnlySlot(inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
-        this.addSlot(new TakeOnlySlot(inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
-        this.addSlot(new TakeOnlySlot(inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE, inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE, inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TWENTY, inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIFTY, inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE_HUNDRED, inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE_HUNDRED, inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
     protected void addPlayerSlots(PlayerInventory playerInventory) {
@@ -141,6 +145,8 @@ public class WalletContainer extends Container {
         assert amount <= 64;
         int coinValue = type.getValue();
         int coins = Math.min(WalletItem.getCoinValue(this.walletStack) / coinValue, amount);
+        ItemStack slot = this.coinSlots.get(type).getItem();
+        coins = Math.min(coins, slot.getMaxStackSize() - slot.getCount());
         _takeCoin(type, coins);
         addWalletCoins(-coins * coinValue);
     }
@@ -227,13 +233,14 @@ public class WalletContainer extends Container {
         }
 
     }
-    public static class TakeOnlySlot extends Slot {
+    public class TakeOnlySlot extends Slot {
 
         private ResourceLocation texture;
 
-        public TakeOnlySlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_, ResourceLocation texture) {
+        public TakeOnlySlot(CoinItem.CoinValue coin, IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_, ResourceLocation texture) {
             super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
             this.texture = texture;
+            coinSlots.put(coin, this);
         }
 
         @Override
