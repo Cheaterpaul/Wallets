@@ -6,14 +6,15 @@ import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
 import de.cheaterpaul.wallets.items.WalletItem;
+import de.cheaterpaul.wallets.network.UpdateWalletPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -25,10 +26,11 @@ public class WalletContainer extends Container {
 
     protected final IInventory inventory;
     private final ItemStack walletStack;
-    private final IntReferenceHolder walletAmount;
-    private final IntReferenceHolder walletPos;
+    private int walletAmount;
+    private int walletPos;
     private final PlayerEntity player;
     private final Map<CoinItem.CoinValue, TakeOnlySlot> coinSlots;
+    private ICoinChangeListener changeListener;
 
     @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
@@ -44,16 +46,18 @@ public class WalletContainer extends Container {
         this.coinSlots = new HashMap<>();
         this.addSlots(inventory);
         this.addPlayerSlots(playerInventory);
-        this.addDataSlot(this.walletAmount = IntReferenceHolder.standalone());
-        this.addDataSlot(this.walletPos = IntReferenceHolder.standalone());
-        this.walletAmount.set(WalletItem.getCoinValue(stack));
+        this.walletAmount = WalletItem.getCoinValue(stack);
         if (!player.level.isClientSide) {
-            this.walletPos.set(playerInventory.findSlotMatchingUnusedItem(stack));
+            this.walletPos = playerInventory.findSlotMatchingUnusedItem(stack);
         }
     }
 
+    public void listen(ICoinChangeListener listener) {
+        this.changeListener = listener;
+    }
+
     public int getWalletAmount() {
-        return this.walletAmount.get();
+        return this.walletAmount;
     }
 
     protected void addSlots(IInventory inventory) {
@@ -134,8 +138,13 @@ public class WalletContainer extends Container {
             } else if (((ICoinContainer) stack.getItem()).removedOnUsage()) {
                 this.inventory.setItem(0, ItemStack.EMPTY);
             }
-            addWalletCoins(coin_value);
+            this.addWalletCoins(coin_value);
         }
+    }
+
+    public void updateClient() {
+        if (!(this.player instanceof ServerPlayerEntity)) return;
+        WalletsMod.dispatcher.sentToPlayer(new UpdateWalletPacket(this.walletAmount, this.walletPos), ((ServerPlayerEntity) this.player));
     }
 
     public void takeCoin(CoinItem.CoinValue value) {
@@ -189,8 +198,8 @@ public class WalletContainer extends Container {
 
     private void addWalletCoins(int amount) {
         WalletItem.setCoinValue(this.walletStack, WalletItem.getCoinValue(this.walletStack) + amount);
-        this.walletAmount.set(WalletItem.getCoinValue(this.walletStack));
-        broadcastChanges();
+        this.walletAmount = WalletItem.getCoinValue(this.walletStack);
+        this.updateClient();
     }
 
     @Override
@@ -204,6 +213,14 @@ public class WalletContainer extends Container {
         return true;
     }
 
+    public void update(UpdateWalletPacket msg) {
+        this.walletAmount = msg.walletAmount;
+        this.walletPos = msg.walletPos;
+        if (this.changeListener != null) {
+            this.changeListener.coinsChanged();
+        }
+    }
+
     public class WalletSafeSlot extends Slot {
         public WalletSafeSlot(IInventory inventory, int slot, int xPos, int yPos) {
             super(inventory, slot, xPos, yPos);
@@ -211,7 +228,7 @@ public class WalletContainer extends Container {
 
         @Override
         public boolean mayPickup(@Nonnull PlayerEntity player) {
-            return walletPos.get() != this.getSlotIndex();
+            return walletPos != this.getSlotIndex();
         }
 
         @Override

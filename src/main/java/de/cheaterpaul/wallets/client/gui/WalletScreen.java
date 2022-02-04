@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.config.Config;
+import de.cheaterpaul.wallets.inventory.ICoinChangeListener;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import de.cheaterpaul.wallets.items.ICoinContainer;
@@ -33,7 +34,7 @@ import java.util.Optional;
 
 import static de.cheaterpaul.wallets.network.InputEventPacket.*;
 
-public class WalletScreen extends ContainerScreen<WalletContainer> {
+public class WalletScreen extends ContainerScreen<WalletContainer> implements ICoinChangeListener {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(REFERENCE.MOD_ID, "textures/gui/wallet.png");
 
@@ -46,6 +47,7 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         this.imageWidth = 188;
         this.inventoryLabelY = this.imageHeight - 94;
         this.inventoryLabelX = 8 + 6;
+        this.menu.listen(this);
     }
 
     @Override
@@ -188,6 +190,11 @@ public class WalletScreen extends ContainerScreen<WalletContainer> {
         this.walletSum.render(stack, mouseX, mouseY, partialTicks);
         this.sumField.render(stack, mouseX, mouseY, partialTicks);
         this.renderTooltip(stack, mouseX, mouseY);
+    }
+
+    @Override
+    public void coinsChanged() {
+        this.walletSum.setValue(String.valueOf(this.menu.getWalletAmount()));
     }
 
     private static class AddWalletButton extends ImageButton {

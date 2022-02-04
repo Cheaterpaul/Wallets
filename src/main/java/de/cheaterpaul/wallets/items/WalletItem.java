@@ -31,6 +31,9 @@ public class WalletItem extends Item implements ICoinContainer {
         ItemStack stack = player.getItemInHand(hand);
         if (player instanceof ServerPlayerEntity) {
             NetworkHooks.openGui(((ServerPlayerEntity) player), new SimpleNamedContainerProvider((id, playerInv, ply) -> new WalletContainer(id, playerInv, stack), new TranslationTextComponent("container.wallets.wallet")));
+            if (player.containerMenu instanceof WalletContainer) {
+                ((WalletContainer) player.containerMenu).updateClient();
+            }
         }
         return ActionResult.sidedSuccess(stack, level.isClientSide);
     }

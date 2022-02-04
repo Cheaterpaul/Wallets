@@ -1,5 +1,6 @@
 package de.cheaterpaul.wallets.network;
 
+import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import net.minecraft.entity.player.ServerPlayerEntity;

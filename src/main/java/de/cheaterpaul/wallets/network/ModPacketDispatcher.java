@@ -1,8 +1,10 @@
 package de.cheaterpaul.wallets.network;
 
 import de.cheaterpaul.wallets.REFERENCE;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class ModPacketDispatcher {
@@ -23,6 +25,7 @@ public class ModPacketDispatcher {
     public void registerPackets() {
         dispatcher.registerMessage(nextID(), InputEventPacket.class, InputEventPacket::encode, InputEventPacket::decode, InputEventPacket::handle);
         dispatcher.registerMessage(nextID(), TakeCoinPacket.class, TakeCoinPacket::encode, TakeCoinPacket::decode, TakeCoinPacket::handle);
+        dispatcher.registerMessage(nextID(), UpdateWalletPacket.class, UpdateWalletPacket::encode, UpdateWalletPacket::decode, UpdateWalletPacket::handle);
     }
 
     public void sentToServer(InputEventPacket packet){
@@ -30,5 +33,8 @@ public class ModPacketDispatcher {
     }
     public void sentToServer(TakeCoinPacket packet){
         this.dispatcher.sendToServer(packet);
+    }
+    public void sentToPlayer(UpdateWalletPacket packet, ServerPlayerEntity player){
+        this.dispatcher.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 }
