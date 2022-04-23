@@ -16,6 +16,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -181,7 +182,12 @@ public class WalletContainer extends Container {
             CoinItem.CoinValue v = CoinItem.CoinValue.values()[i];
             int amount = remaining / v.getValue();
             remaining -= amount * v.getValue();
-            _takeCoin(v, amount);
+            while (amount > 0){
+                CoinItem item = CoinItem.getCoin(v);
+                int stackSize = MathHelper.clamp(amount,0, item.getMaxStackSize());
+                amount -= stackSize;
+                player.inventory.placeItemBackInInventory(player.level, new ItemStack(item, stackSize));
+            }
         }
         addWalletCoins(-value);
     }
