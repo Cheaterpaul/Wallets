@@ -1,10 +1,10 @@
 package de.cheaterpaul.wallets.items;
 
 import de.cheaterpaul.wallets.WalletsMod;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -21,8 +21,8 @@ public class CoinPouchItem extends Item implements ICoinContainer {
 
     @Nonnull
     @Override
-    public ITextComponent getName(@Nonnull ItemStack stack) {
-        return new TranslationTextComponent("item.wallets.coin_pouch", getCoins(stack));
+    public Component getName(@Nonnull ItemStack stack) {
+        return new TranslatableComponent("item.wallets.coin_pouch", getCoins(stack));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CoinPouchItem extends Item implements ICoinContainer {
     }
 
     public static ItemStack createPouch(int amount) {
-        ItemStack pouch = new ItemStack(WalletsMod.coin_pouch);
+        ItemStack pouch = new ItemStack(WalletsMod.COIN_POUCH.get());
         pouch.getOrCreateTag().putInt("ContainedCoins", amount);
         return pouch;
     }

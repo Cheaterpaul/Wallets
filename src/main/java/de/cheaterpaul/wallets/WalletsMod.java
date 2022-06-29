@@ -10,35 +10,62 @@ import de.cheaterpaul.wallets.items.CoinPouchItem;
 import de.cheaterpaul.wallets.items.WalletItem;
 import de.cheaterpaul.wallets.network.ModPacketDispatcher;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.registries.*;
 
 import javax.annotation.Nonnull;
 
 @Mod(REFERENCE.MOD_ID)
 public class WalletsMod
 {
-    public WalletsMod() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, REFERENCE.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.CONTAINERS, REFERENCE.MOD_ID);
 
-        MinecraftForge.EVENT_BUS.register(this);
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab("wallets") {
+        @Nonnull
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(WALLET.get());
+        }
+    };
+
+    public static final ModPacketDispatcher dispatcher = new ModPacketDispatcher();
+
+    public static final RegistryObject<CoinItem> COIN_ONE = ITEMS.register("coin_one", () -> new CoinItem(CoinItem.CoinValue.ONE, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<CoinItem> COIN_FIVE = ITEMS.register("coin_five", () -> new CoinItem(CoinItem.CoinValue.FIVE, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<CoinItem> COIN_TWENTY = ITEMS.register("coin_twenty", () -> new CoinItem(CoinItem.CoinValue.TWENTY, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<CoinItem> COIN_FIFTY = ITEMS.register("coin_fifty", () -> new CoinItem(CoinItem.CoinValue.FIFTY, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<CoinItem> COIN_ONE_HUNDRED = ITEMS.register("coin_one_hundred", () -> new CoinItem(CoinItem.CoinValue.ONE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<CoinItem> COIN_FIVE_HUNDRED = ITEMS.register("coin_five_hundred", () -> new CoinItem(CoinItem.CoinValue.FIVE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)));
+    public static final RegistryObject<WalletItem> WALLET = ITEMS.register("wallet", () -> new WalletItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)));
+    public static final RegistryObject<CoinPouchItem> COIN_POUCH = ITEMS.register("coin_pouch", () -> new CoinPouchItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)));
+
+    public static final RegistryObject<MenuType<WalletContainer>> WALLET_CONTAINER = MENUS.register("wallet_container", () -> new MenuType<>(WalletContainer::new));
+
+    public WalletsMod() {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::setup);
+        bus.addListener(this::gatherData);
+        bus.addListener(this::doClientStuff);
+        ITEMS.register(bus);
+        MENUS.register(bus);
+
         Config.init();
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        dispatcher.registerPackets();
     }
 
     private void gatherData(final GatherDataEvent event) {
@@ -53,53 +80,4 @@ public class WalletsMod
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ModScreens::registerScreens);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        dispatcher.registerPackets();
-    }
-
-    public static final ModPacketDispatcher dispatcher = new ModPacketDispatcher();
-
-    public static final ItemGroup ITEM_GROUP = new ItemGroup("wallets") {
-        @Nonnull
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(wallet_item);
-        }
-    };
-    @ObjectHolder(REFERENCE.MOD_ID+":coin_one")
-    public static final CoinItem coin_one = getNull();
-    @ObjectHolder(REFERENCE.MOD_ID+":wallet")
-    public static final WalletItem wallet_item = getNull();
-    @ObjectHolder(REFERENCE.MOD_ID+":coin_pouch")
-    public static final CoinPouchItem coin_pouch = getNull();
-    @ObjectHolder(REFERENCE.MOD_ID+":wallet")
-    public static final ContainerType<WalletContainer> wallet_container = getNull();
-
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
-            IForgeRegistry<Item> registry = event.getRegistry();
-            registry.register(new CoinItem(CoinItem.CoinValue.ONE, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_one"));
-            registry.register(new CoinItem(CoinItem.CoinValue.FIVE, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_five"));
-            registry.register(new CoinItem(CoinItem.CoinValue.TWENTY, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_twenty"));
-            registry.register(new CoinItem(CoinItem.CoinValue.FIFTY, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_fifty"));
-            registry.register(new CoinItem(CoinItem.CoinValue.ONE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_one_hundred"));
-            registry.register(new CoinItem(CoinItem.CoinValue.FIVE_HUNDRED, new Item.Properties().tab(ITEM_GROUP)).setRegistryName(REFERENCE.MOD_ID, "coin_five_hundred"));
-            registry.register(new CoinPouchItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)).setRegistryName(REFERENCE.MOD_ID, "coin_pouch"));
-            registry.register(new WalletItem(new Item.Properties().tab(ITEM_GROUP).stacksTo(1)).setRegistryName(REFERENCE.MOD_ID, "wallet"));
-        }
-
-        @SubscribeEvent
-        public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> event) {
-            IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
-            registry.register(new ContainerType<>(WalletContainer::new).setRegistryName(REFERENCE.MOD_ID, "wallet"));
-        }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Nonnull
-    public static <T> T getNull() {
-        return null;
-    }
 }

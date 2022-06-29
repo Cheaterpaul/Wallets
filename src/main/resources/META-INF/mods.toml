@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 license="LGPL-3.0"
 issueTrackerURL = "https://github.com/Cheaterpaul/Wallets/issues"
 [[mods]]
@@ -17,12 +17,12 @@ Coins of different value and a wallet to store coins easily.
 [[dependencies.wallets]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[${forge_version},)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.wallets]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[${mc_version},)"
     ordering="NONE"
     side="BOTH"

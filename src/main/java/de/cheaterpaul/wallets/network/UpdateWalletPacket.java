@@ -3,10 +3,9 @@ package de.cheaterpaul.wallets.network;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -20,18 +19,18 @@ public class UpdateWalletPacket {
         this.walletPos = walletPos;
     }
 
-    static void encode(UpdateWalletPacket msg, PacketBuffer buf) {
+    static void encode(UpdateWalletPacket msg, FriendlyByteBuf buf) {
         buf.writeVarInt(msg.walletAmount);
         buf.writeVarInt(msg.walletPos);
     }
 
-    static UpdateWalletPacket decode(PacketBuffer buf) {
+    static UpdateWalletPacket decode(FriendlyByteBuf buf) {
         return new UpdateWalletPacket(buf.readVarInt(), buf.readVarInt());
     }
 
     public static void handle(final UpdateWalletPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context ctx = contextSupplier.get();
-        Container menu = Minecraft.getInstance().player.containerMenu;;
+        AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;;
         if (menu instanceof WalletContainer) {
             ((WalletContainer) menu).update(msg);
         }

@@ -1,11 +1,11 @@
 package de.cheaterpaul.wallets.network;
 
 import de.cheaterpaul.wallets.REFERENCE;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModPacketDispatcher {
     protected final SimpleChannel dispatcher;
@@ -34,7 +34,7 @@ public class ModPacketDispatcher {
     public void sentToServer(TakeCoinPacket packet){
         this.dispatcher.sendToServer(packet);
     }
-    public void sentToPlayer(UpdateWalletPacket packet, ServerPlayerEntity player){
+    public void sentToPlayer(UpdateWalletPacket packet, ServerPlayer player){
         this.dispatcher.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 }

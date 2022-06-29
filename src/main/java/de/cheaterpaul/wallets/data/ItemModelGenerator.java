@@ -18,7 +18,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         CoinItem.getAllCoins().forEach(coin -> {
             withExistingParent(coin.getRegistryName().toString(), mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + coin.getRegistryName().getPath());
         });
-        withExistingParent(WalletsMod.wallet_item.getRegistryName().toString(),mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + WalletsMod.wallet_item.getRegistryName().getPath());
-        withExistingParent(WalletsMod.coin_pouch.getRegistryName().toString(),mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + WalletsMod.coin_pouch.getRegistryName().getPath());
+        withExistingParent(WalletsMod.WALLET.getId().toString(),mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + WalletsMod.WALLET.getId().getPath());
+        withExistingParent(WalletsMod.COIN_POUCH.getId().toString(),mcLoc("item/generated")).texture("layer0", REFERENCE.MOD_ID + ":item/" + WalletsMod.COIN_POUCH.getId().getPath());
     }
 }
