@@ -1,0 +1,18 @@
+{
+  "item.wallets.wallet": "Wallet",
+  "item.wallets.coin_one": "Simple Bronze Coin",
+  "item.wallets.coin_five": "Bronze Coin",
+  "item.wallets.coin_twenty": "Silver Coin",
+  "item.wallets.coin_fifty": "Gold Coin",
+  "item.wallets.coin_one_hundred": "Platinum Coin",
+  "item.wallets.coin_five_hundred": "Equillium Coin",
+  "container.wallets.wallet": "Wallet",
+  "text.wallets.wallet.stored": "%s Coins Stored",
+  "itemGroup.wallets": "Wallets",
+  "text.wallets.take": "Take a %s Coin",
+  "text.wallets.create_pouch": "Create %s Coin Pouch",
+  "text.wallets.sum_amount": "Total value: %s",
+  "text.wallets.transfer": "Insert %s Coins",
+  "item.wallets.coin_pouch": "%s Coins",
+  "text.wallets.wallet_full": "Wallet is full"
+}
