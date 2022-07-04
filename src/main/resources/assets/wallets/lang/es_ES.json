@@ -14,5 +14,5 @@
   "text.wallets.sum_amount": "Valor total: %s",
   "text.wallets.transfer": "Insertar %s Monedas",
   "item.wallets.coin_pouch": "%s Monedas",
-  "text.wallets.wallet_full": "Wallet is full"
+  "text.wallets.wallet_full": "La cartera está llena"
 }
