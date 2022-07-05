@@ -1,0 +1,18 @@
+{
+  "item.wallets.wallet": "Geldbörse",
+  "item.wallets.coin_one": "Einfache Bronzemünze",
+  "item.wallets.coin_five": "Bronzemünze",
+  "item.wallets.coin_twenty": "Silbermünze",
+  "item.wallets.coin_fifty": "Goldmünze",
+  "item.wallets.coin_one_hundred": "Platinmünze",
+  "item.wallets.coin_five_hundred": "Equilliummünze",
+  "container.wallets.wallet": "Geldbörse",
+  "text.wallets.wallet.stored": "%s Münzen enthalten",
+  "itemGroup.wallets": "Wallets",
+  "text.wallets.take": "Nimm eine %s Münze",
+  "text.wallets.create_pouch": "Erstelle Münzbeutel mit %s Münzen",
+  "text.wallets.sum_amount": "Gesamtwert: %s",
+  "text.wallets.transfer": "Füge %s Münzen hinzu",
+  "item.wallets.coin_pouch": "%s Münzen",
+  "text.wallets.wallet_full": "Geldbörse ist voll"
+}
