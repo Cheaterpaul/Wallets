@@ -1,0 +1,18 @@
+{
+  "item.wallets.wallet": "Кошелёк",
+  "item.wallets.coin_one": "Обычная Бронзовая Монета",
+  "item.wallets.coin_five": "Бронзовая Монета",
+  "item.wallets.coin_twenty": "Серебрянная Монета",
+  "item.wallets.coin_fifty": "Золотая монета",
+  "item.wallets.coin_one_hundred": "Платиновая монета",
+  "item.wallets.coin_five_hundred": "Эквиллиумовая монета",
+  "container.wallets.wallet": "Кошелёк",
+  "text.wallets.wallet.stored": "%s монет в кошельке",
+  "itemGroup.wallets": "Кошельки",
+  "text.wallets.take": "Взять %s Монету",
+  "text.wallets.create_pouch": "Создать %s Мешок Монет",
+  "text.wallets.sum_amount": "Общас стоимость: %s",
+  "text.wallets.transfer": "Вставить %s Монет",
+  "item.wallets.coin_pouch": "%s Монет",
+  "text.wallets.wallet_full": "Wallet is full"
+}
