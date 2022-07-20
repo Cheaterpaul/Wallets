@@ -15,27 +15,27 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.registries.*;
-
-import javax.annotation.Nonnull;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(REFERENCE.MOD_ID)
 public class WalletsMod
 {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, REFERENCE.MOD_ID);
-    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.CONTAINERS, REFERENCE.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, REFERENCE.MOD_ID);
 
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab("wallets") {
-        @Nonnull
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(WALLET.get());
         }
     };
@@ -70,10 +70,8 @@ public class WalletsMod
 
     private void gatherData(final GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
-        if (event.includeClient()) {
-            gen.addProvider(new ItemModelGenerator(gen, event.getExistingFileHelper()));
-        }
-        gen.addProvider(new RecipeGenerator(gen));
+        gen.addProvider(event.includeClient(), new ItemModelGenerator(gen, event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new RecipeGenerator(gen));
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

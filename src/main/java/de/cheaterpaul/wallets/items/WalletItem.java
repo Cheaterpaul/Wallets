@@ -3,7 +3,6 @@ package de.cheaterpaul.wallets.items;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -16,8 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class WalletItem extends Item implements ICoinContainer {
@@ -26,12 +23,11 @@ public class WalletItem extends Item implements ICoinContainer {
         super(properties);
     }
 
-    @Nonnull
     @Override
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player instanceof ServerPlayer) {
-            NetworkHooks.openGui(((ServerPlayer) player), new SimpleMenuProvider((id, playerInv, ply) -> new WalletContainer(id, playerInv, stack), new TranslatableComponent("container.wallets.wallet")));
+            NetworkHooks.openScreen(((ServerPlayer) player), new SimpleMenuProvider((id, playerInv, ply) -> new WalletContainer(id, playerInv, stack), Component.translatable("container.wallets.wallet")));
             if (player.containerMenu instanceof WalletContainer) {
                 ((WalletContainer) player.containerMenu).updateClient();
             }
@@ -40,9 +36,9 @@ public class WalletItem extends Item implements ICoinContainer {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @org.jetbrains.annotations.Nullable Level lvel, List<Component> components, @NotNull TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, Level lvel, List<Component> components, @NotNull TooltipFlag flag) {
         int value = getCoinValue(stack);
-        components.add(new TranslatableComponent("text.wallets.wallet.stored", value).withStyle(ChatFormatting.DARK_GRAY));
+        components.add(Component.translatable("text.wallets.wallet.stored", value).withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override

@@ -2,11 +2,9 @@ package de.cheaterpaul.wallets.items;
 
 import de.cheaterpaul.wallets.WalletsMod;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
 
 public class CoinPouchItem extends Item implements ICoinContainer {
 
@@ -19,10 +17,9 @@ public class CoinPouchItem extends Item implements ICoinContainer {
         return false;
     }
 
-    @Nonnull
     @Override
-    public Component getName(@Nonnull ItemStack stack) {
-        return new TranslatableComponent("item.wallets.coin_pouch", getCoins(stack));
+    public Component getName( ItemStack stack) {
+        return Component.translatable("item.wallets.coin_pouch", getCoins(stack));
     }
 
     @Override

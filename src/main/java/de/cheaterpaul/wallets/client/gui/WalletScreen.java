@@ -21,8 +21,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -61,38 +59,38 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
                 if (itemstack.getItem() instanceof ICoinContainer) {
                     amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
                 }
-                Component text = new TranslatableComponent("text.wallets.transfer", amount);
+                Component text = Component.translatable("text.wallets.transfer", amount);
                 if (menu.getWalletAmount() + amount > 999999999) {
-                    text = new TranslatableComponent("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
+                    text = Component.translatable("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
                 }
                 renderTooltip(stack, text, mouseX, mouseY);
             }
-        }, TextComponent.EMPTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), TextComponent.EMPTY, CoinItem.CoinValue.ONE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE), TextComponent.EMPTY, CoinItem.CoinValue.FIVE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.TWENTY), TextComponent.EMPTY, CoinItem.CoinValue.TWENTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), TextComponent.EMPTY, CoinItem.CoinValue.FIFTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), TextComponent.EMPTY, CoinItem.CoinValue.ONE_HUNDRED));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), TextComponent.EMPTY, CoinItem.CoinValue.FIVE_HUNDRED));
+        }, Component.empty()));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), Component.empty(), CoinItem.CoinValue.ONE));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE), Component.empty(), CoinItem.CoinValue.FIVE));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.TWENTY), Component.empty(), CoinItem.CoinValue.TWENTY));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), Component.empty(), CoinItem.CoinValue.FIFTY));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), Component.empty(), CoinItem.CoinValue.ONE_HUNDRED));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), Component.empty(), CoinItem.CoinValue.FIVE_HUNDRED));
         this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 142 + 2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
             getSum().ifPresent(value -> {
-                renderTooltip(stack, new TranslatableComponent("text.wallets.take", value), mouseX, mouseY);
+                renderTooltip(stack, Component.translatable("text.wallets.take", value), mouseX, mouseY);
             });
-        }, TextComponent.EMPTY));
+        }, Component.empty()));
         if (!Config.CONFIG.disableCoinPouch.get()) {
             this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, (button, stack, mouseX, mouseY) -> {
                 getSum().ifPresent(value -> {
-                    renderTooltip(stack, new TranslatableComponent("text.wallets.create_pouch", value), mouseX, mouseY);
+                    renderTooltip(stack, Component.translatable("text.wallets.create_pouch", value), mouseX, mouseY);
                 });
-            }, TextComponent.EMPTY));
+            }, Component.empty()));
         }
-        this.sumField = new NumberOnlyTextFieldWidget(this.font, this.leftPos + 52, this.topPos + 19, 84, 9, new TranslatableComponent("text.wallets.take_coin_sum"));
+        this.sumField = new NumberOnlyTextFieldWidget(this.font, this.leftPos + 52, this.topPos + 19, 84, 9, Component.translatable("text.wallets.take_coin_sum"));
         this.sumField.setMaxLength(13);
         this.sumField.setValue("");
         this.sumField.setBordered(false);
         this.setInitialFocus(this.sumField);
         this.addWidget(this.sumField);
-        this.walletSum = new NoEditTextFieldWidget(this.font, this.leftPos + 8, this.topPos + 63, 55, 10, new TranslatableComponent("text.wallets.wallet_sum"));
+        this.walletSum = new NoEditTextFieldWidget(this.font, this.leftPos + 8, this.topPos + 63, 55, 10, Component.translatable("text.wallets.wallet_sum"));
         this.walletSum.setMaxLength(10);
         this.walletSum.setBordered(false);
         this.walletSum.setEditable(false);
@@ -173,7 +171,7 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
     }
 
     private void toolTip(Button button, PoseStack stack, int mouseX, int mouseY, CoinItem.CoinValue amount) {
-        renderTooltip(stack, new TranslatableComponent("text.wallets.take", amount.getValue()), mouseX, mouseY);
+        renderTooltip(stack, Component.translatable("text.wallets.take", amount.getValue()), mouseX, mouseY);
     }
 
     @Override
