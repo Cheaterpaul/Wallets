@@ -53,6 +53,17 @@ public class WalletContainer extends AbstractContainerMenu {
         }
     }
 
+    @Override
+    public void sendAllDataToRemote() {
+        super.sendAllDataToRemote();
+        updateClient();
+    }
+
+    @Override
+    public void setData(int p_38855_, int p_38856_) {
+        super.setData(p_38855_, p_38856_);
+    }
+
     public void listen(ICoinChangeListener listener) {
         this.changeListener = listener;
     }

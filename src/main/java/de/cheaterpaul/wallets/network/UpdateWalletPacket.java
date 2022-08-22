@@ -1,7 +1,6 @@
 package de.cheaterpaul.wallets.network;
 
 import de.cheaterpaul.wallets.inventory.WalletContainer;
-import de.cheaterpaul.wallets.items.CoinItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -30,9 +29,12 @@ public class UpdateWalletPacket {
 
     public static void handle(final UpdateWalletPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context ctx = contextSupplier.get();
-        AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;;
-        if (menu instanceof WalletContainer) {
-            ((WalletContainer) menu).update(msg);
-        }
+        ctx.enqueueWork(() -> {
+            AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;;
+            if (menu instanceof WalletContainer) {
+                ((WalletContainer) menu).update(msg);
+            }
+        });
+        ctx.setPacketHandled(true);
     }
 }

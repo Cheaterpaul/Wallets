@@ -1,11 +1,9 @@
 package de.cheaterpaul.wallets.network;
 
-import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -55,15 +53,18 @@ public class InputEventPacket {
     public static void handle(final InputEventPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context ctx = contextSupplier.get();
         ServerPlayer player = ctx.getSender();
-        AbstractContainerMenu menu = player.containerMenu;
-        if (menu instanceof WalletContainer) {
-            switch (msg.action) {
-                case INSERT_COIN -> ((WalletContainer) menu).insertCoin();
-                case TAKE_COIN -> ((WalletContainer) menu).takeCoin(CoinItem.CoinValue.valueOf(msg.param));
-                case TAKE_COINS -> ((WalletContainer) menu).takeCoins(Integer.parseInt(msg.param));
-                case CREATE_POUCH -> ((WalletContainer) menu).createPouch(Integer.parseInt(msg.param));
+        ctx.enqueueWork(() -> {
+            AbstractContainerMenu menu = player.containerMenu;
+            if (menu instanceof WalletContainer) {
+                switch (msg.action) {
+                    case INSERT_COIN -> ((WalletContainer) menu).insertCoin();
+                    case TAKE_COIN -> ((WalletContainer) menu).takeCoin(CoinItem.CoinValue.valueOf(msg.param));
+                    case TAKE_COINS -> ((WalletContainer) menu).takeCoins(Integer.parseInt(msg.param));
+                    case CREATE_POUCH -> ((WalletContainer) menu).createPouch(Integer.parseInt(msg.param));
+                }
             }
-        }
+        });
+        ctx.setPacketHandled(true);
     }
 
 }

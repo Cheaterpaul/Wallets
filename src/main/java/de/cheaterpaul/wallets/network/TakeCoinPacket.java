@@ -30,10 +30,13 @@ public class TakeCoinPacket {
 
     public static void handle(final TakeCoinPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context ctx = contextSupplier.get();
-        ServerPlayer player = ctx.getSender();
-        AbstractContainerMenu menu = player.containerMenu;
-        if (menu instanceof WalletContainer) {
-            ((WalletContainer) menu).takeCoin(msg.type, msg.amount);
-        }
+        ctx.enqueueWork(() -> {
+            ServerPlayer player = ctx.getSender();
+            AbstractContainerMenu menu = player.containerMenu;
+            if (menu instanceof WalletContainer) {
+                ((WalletContainer) menu).takeCoin(msg.type, msg.amount);
+            }
+        });
+        ctx.setPacketHandled(true);
     }
 }
