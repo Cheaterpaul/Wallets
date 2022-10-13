@@ -1,0 +1,18 @@
+{
+  "item.wallets.wallet": "Cartera",
+  "item.wallets.coin_one": "Moneda de bronze simple",
+  "item.wallets.coin_five": "Moneda de bronze",
+  "item.wallets.coin_twenty": "Moneda de plata",
+  "item.wallets.coin_fifty": "Moneda d'or",
+  "item.wallets.coin_one_hundred": "Moneda de platí",
+  "item.wallets.coin_five_hundred": "Moneda d'equili",
+  "container.wallets.wallet": "Cartera",
+  "text.wallets.wallet.stored": "%s monedes emmagatzemades",
+  "itemGroup.wallets": "Carteres",
+  "text.wallets.take": "Pren una moneda de %s",
+  "text.wallets.create_pouch": "Crear %s bossa de monedes",
+  "text.wallets.sum_amount": "Valor total: %s",
+  "text.wallets.transfer": "Insereix %s monedes",
+  "item.wallets.coin_pouch": "%s Monedes",
+  "text.wallets.wallet_full": "La cartera està plena"
+}
