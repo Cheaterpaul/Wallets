@@ -17,6 +17,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -51,38 +52,28 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 18, this.getGuiTop() + 37, 11, 7, 202, 0, 7, BACKGROUND, 256, 256, this::walletApplyPressed, new Button.OnTooltip() {
-            @Override
-            public void onTooltip(@Nonnull Button button, @Nonnull PoseStack stack, int mouseX, int mouseY) {
-                ItemStack itemstack = menu.slots.get(0).container.getItem(0);
-                int amount = 0;
-                if (itemstack.getItem() instanceof ICoinContainer) {
-                    amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
-                }
-                Component text = Component.translatable("text.wallets.transfer", amount);
-                if (menu.getWalletAmount() + amount > 999999999) {
-                    text = Component.translatable("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
-                }
-                renderTooltip(stack, text, mouseX, mouseY);
-            }
-        }, Component.empty()));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE), Component.empty(), CoinItem.CoinValue.ONE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE), Component.empty(), CoinItem.CoinValue.FIVE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.TWENTY), Component.empty(), CoinItem.CoinValue.TWENTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIFTY), Component.empty(), CoinItem.CoinValue.FIFTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.ONE_HUNDRED), Component.empty(), CoinItem.CoinValue.ONE_HUNDRED));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, (button, stack, mouseX, mouseY) -> toolTip(button, stack, mouseX, mouseY, CoinItem.CoinValue.FIVE_HUNDRED), Component.empty(), CoinItem.CoinValue.FIVE_HUNDRED));
-        this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 142 + 2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, (button, stack, mouseX, mouseY) -> {
-            getSum().ifPresent(value -> {
-                renderTooltip(stack, Component.translatable("text.wallets.take", value), mouseX, mouseY);
-            });
-        }, Component.empty()));
+        ImageButton button = new ImageButton(this.getGuiLeft() + 18, this.getGuiTop() + 37, 11, 7, 202, 0, 7, BACKGROUND, 256, 256, this::walletApplyPressed);
+        this.addRenderableWidget(button);
+        ItemStack itemstack = menu.slots.get(0).container.getItem(0);
+        int amount = 0;
+        if (itemstack.getItem() instanceof ICoinContainer) {
+            amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
+        }
+        Component text = Component.translatable("text.wallets.transfer", amount);
+        if (menu.getWalletAmount() + amount > 999999999) {
+            text = Component.translatable("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
+        }
+        button.setTooltip(Tooltip.create(text));
+
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.TWENTY));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIFTY));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE_HUNDRED));
+        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE_HUNDRED));
+        this.addRenderableWidget(new TakeButton(this.getGuiLeft() + 142 + 2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, Component.empty()));
         if (!Config.CONFIG.disableCoinPouch.get()) {
-            this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, (button, stack, mouseX, mouseY) -> {
-                getSum().ifPresent(value -> {
-                    renderTooltip(stack, Component.translatable("text.wallets.create_pouch", value), mouseX, mouseY);
-                });
-            }, Component.empty()));
+            this.addRenderableWidget(new PouchButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, Component.empty()));
         }
         this.sumField = new NumberOnlyTextFieldWidget(this.font, this.leftPos + 52, this.topPos + 19, 84, 9, Component.translatable("text.wallets.take_coin_sum"));
         this.sumField.setMaxLength(13);
@@ -139,13 +130,13 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
     public void renderSlot(@Nonnull PoseStack stack, @Nonnull Slot slot) {
         if (slot instanceof WalletContainer.TakeOnlySlot) {
             RenderSystem.enableDepthTest();
-            RenderSystem.enableTexture();
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1, 1, 1, 0.2f);
             RenderSystem.colorMask(true, true, true, true);
             TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(((WalletContainer.TakeOnlySlot) slot).getTexture());
-            RenderSystem.setShaderTexture(0, sprite.atlas().location());
-            blit(stack, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
+            RenderSystem.setShaderTexture(0, sprite.atlasLocation());
+            blit(stack, slot.x, slot.y, 0, 16, 16, sprite);
+            RenderSystem.setShaderColor(1, 1, 1, 1f);
 
         }
         super.renderSlot(stack, slot);
@@ -170,14 +161,10 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         }
     }
 
-    private void toolTip(Button button, PoseStack stack, int mouseX, int mouseY, CoinItem.CoinValue amount) {
-        renderTooltip(stack, Component.translatable("text.wallets.take", amount.getValue()), mouseX, mouseY);
-    }
-
     @Override
     protected void renderBg(@Nonnull PoseStack stack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         RenderSystem.setShaderTexture(0, BACKGROUND);
-        blit(stack, this.getGuiLeft(), this.getGuiTop(), this.getBlitOffset(), 0, 0, this.getXSize(), this.getYSize(), 256, 256);
+        blit(stack, this.getGuiLeft(), this.getGuiTop(), 0, 0, 0, this.getXSize(), this.getYSize(), 256, 256);
     }
 
     @Override
@@ -201,6 +188,7 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         public AddWalletButton(int xPos, int yPos, int xSize, int ySize, int xTexPos, int yTexPos, int yTexDiff, ResourceLocation texture, OnPress pressable, CoinItem.CoinValue value) {
             super(xPos, yPos, xSize, ySize, xTexPos, yTexPos, yTexDiff, texture, pressable);
             this.value = value;
+            this.setTooltip(Tooltip.create(Component.translatable("text.wallets.take", value.getValue())));
         }
 
         public AddWalletButton(int xPos, int yPos, int xSize, int ySize, int xTexPos, int yTexPos, int yTexDiff, ResourceLocation texture, int textureWidth, int textureHeight, OnPress pressable, CoinItem.CoinValue value) {
@@ -210,11 +198,6 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
 
         public AddWalletButton(int xPos, int yPos, int xSize, int ySize, int xTexPos, int yTexPos, int yTexDiff, ResourceLocation texture, int textureWidth, int textureHeight, OnPress pressable, Component name, CoinItem.CoinValue value) {
             super(xPos, yPos, xSize, ySize, xTexPos, yTexPos, yTexDiff, texture, textureWidth, textureHeight, pressable, name);
-            this.value = value;
-        }
-
-        public AddWalletButton(int xPos, int yPos, int xSize, int ySize, int xTexPos, int yTexPos, int yTexDiff, ResourceLocation texture, int textureWidth, int textureHeight, OnPress pressable, OnTooltip tooltip, Component name, CoinItem.CoinValue value) {
-            super(xPos, yPos, xSize, ySize, xTexPos, yTexPos, yTexDiff, texture, textureWidth, textureHeight, pressable, tooltip, name);
             this.value = value;
         }
 
@@ -236,6 +219,36 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         @Override
         public boolean isFocused() {
             return false;
+        }
+    }
+
+    private class PouchButton extends ImageButton {
+
+        public PouchButton(int p_94256_, int p_94257_, int p_94258_, int p_94259_, int p_94260_, int p_94261_, int p_94262_, ResourceLocation p_94263_, int p_94264_, int p_94265_, OnPress p_94266_, Component p_94267_) {
+            super(p_94256_, p_94257_, p_94258_, p_94259_, p_94260_, p_94261_, p_94262_, p_94263_, p_94264_, p_94265_, p_94266_, p_94267_);
+        }
+
+        @Override
+        public void renderWidget(PoseStack p_268099_, int p_267992_, int p_267950_, float p_268076_) {
+            super.renderWidget(p_268099_, p_267992_, p_267950_, p_268076_);
+            getSum().ifPresent(value -> {
+                this.setTooltip(Tooltip.create(Component.translatable("text.wallets.create_pouch", value)));
+            });
+        }
+    }
+
+    private class TakeButton extends ImageButton {
+
+        public TakeButton(int p_94256_, int p_94257_, int p_94258_, int p_94259_, int p_94260_, int p_94261_, int p_94262_, ResourceLocation p_94263_, int p_94264_, int p_94265_, OnPress p_94266_, Component p_94267_) {
+            super(p_94256_, p_94257_, p_94258_, p_94259_, p_94260_, p_94261_, p_94262_, p_94263_, p_94264_, p_94265_, p_94266_, p_94267_);
+        }
+
+        @Override
+        public void renderWidget(PoseStack p_268099_, int p_267992_, int p_267950_, float p_268076_) {
+            super.renderWidget(p_268099_, p_267992_, p_267950_, p_268076_);
+                getSum().ifPresent(value -> {
+                    this.setTooltip(Tooltip.create(Component.translatable("text.wallets.take", value)));
+                });
         }
     }
 

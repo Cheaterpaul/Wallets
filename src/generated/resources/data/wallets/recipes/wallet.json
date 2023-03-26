@@ -1,18 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "tag": "forge:leather"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
   "pattern": [
     " S ",
     "LLL"
   ],
-  "key": {
-    "S": {
-      "tag": "forge:string"
-    },
-    "L": {
-      "tag": "forge:leather"
-    }
-  },
   "result": {
     "item": "wallets:wallet"
-  }
+  },
+  "show_notification": true
 }

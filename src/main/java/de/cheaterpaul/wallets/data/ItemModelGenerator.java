@@ -2,7 +2,7 @@ package de.cheaterpaul.wallets.data;
 
 import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -10,8 +10,8 @@ import java.util.Arrays;
 
 public class ItemModelGenerator extends ItemModelProvider {
 
-    public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, REFERENCE.MOD_ID, existingFileHelper);
+    public ItemModelGenerator(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
+        super(packOutput, REFERENCE.MOD_ID, existingFileHelper);
     }
 
     @Override
