@@ -1,7 +1,6 @@
 package de.cheaterpaul.wallets.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.WalletsMod;
 import de.cheaterpaul.wallets.config.Config;
@@ -14,6 +13,7 @@ import de.cheaterpaul.wallets.network.TakeCoinPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -127,19 +128,18 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
     }
 
     @Override
-    public void renderSlot(@Nonnull PoseStack stack, @Nonnull Slot slot) {
+    public void renderSlot(@Nonnull GuiGraphics graphics, @Nonnull Slot slot) {
         if (slot instanceof WalletContainer.TakeOnlySlot) {
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1, 1, 1, 0.2f);
+            graphics.setColor(1, 1, 1, 0.2f);
             RenderSystem.colorMask(true, true, true, true);
             TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(((WalletContainer.TakeOnlySlot) slot).getTexture());
-            RenderSystem.setShaderTexture(0, sprite.atlasLocation());
-            blit(stack, slot.x, slot.y, 0, 16, 16, sprite);
-            RenderSystem.setShaderColor(1, 1, 1, 1f);
+            graphics.blit(slot.x, slot.y, 0, 16, 16, sprite);
+            graphics.setColor(1, 1, 1, 1f);
 
         }
-        super.renderSlot(stack, slot);
+        super.renderSlot(graphics, slot);
     }
 
     private void walletCreateCoinPoach(Button b) {
@@ -162,18 +162,17 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack stack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        blit(stack, this.getGuiLeft(), this.getGuiTop(), 0, 0, 0, this.getXSize(), this.getYSize(), 256, 256);
+    protected void renderBg(@Nonnull GuiGraphics graphics, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
+        graphics.blit(BACKGROUND, this.getGuiLeft(), this.getGuiTop(), 0, 0, 0, this.getXSize(), this.getYSize(), 256, 256);
     }
 
     @Override
-    public void render(@Nonnull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
         this.walletSum.setValue(String.valueOf(this.menu.getWalletAmount()));
-        this.walletSum.render(stack, mouseX, mouseY, partialTicks);
-        this.sumField.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
+        this.walletSum.render(graphics, mouseX, mouseY, partialTicks);
+        this.sumField.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
@@ -229,8 +228,8 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         }
 
         @Override
-        public void renderWidget(PoseStack p_268099_, int p_267992_, int p_267950_, float p_268076_) {
-            super.renderWidget(p_268099_, p_267992_, p_267950_, p_268076_);
+        public void renderWidget(@NotNull GuiGraphics graphics, int p_267992_, int p_267950_, float p_268076_) {
+            super.renderWidget(graphics, p_267992_, p_267950_, p_268076_);
             getSum().ifPresent(value -> {
                 this.setTooltip(Tooltip.create(Component.translatable("text.wallets.create_pouch", value)));
             });
@@ -244,8 +243,8 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         }
 
         @Override
-        public void renderWidget(PoseStack p_268099_, int p_267992_, int p_267950_, float p_268076_) {
-            super.renderWidget(p_268099_, p_267992_, p_267950_, p_268076_);
+        public void renderWidget(GuiGraphics graphics, int p_267992_, int p_267950_, float p_268076_) {
+            super.renderWidget(graphics, p_267992_, p_267950_, p_268076_);
                 getSum().ifPresent(value -> {
                     this.setTooltip(Tooltip.create(Component.translatable("text.wallets.take", value)));
                 });

@@ -48,7 +48,7 @@ public class WalletContainer extends AbstractContainerMenu {
         this.addSlots(inventory);
         this.addPlayerSlots(playerInventory);
         this.walletAmount = WalletItem.getCoinValue(stack);
-        if (!player.level.isClientSide) {
+        if (!player.level().isClientSide) {
             this.walletPos = playerInventory.findSlotMatchingUnusedItem(stack);
         }
     }
@@ -140,7 +140,7 @@ public class WalletContainer extends AbstractContainerMenu {
     }
 
     public void insertCoin() {
-        if (player.level.isClientSide) return;
+        if (player.level().isClientSide) return;
         ItemStack stack = this.inventory.getItem(0);
         if (!stack.isEmpty()) {
             int coin_value = (((ICoinContainer) stack.getItem()).getCoins(stack));
