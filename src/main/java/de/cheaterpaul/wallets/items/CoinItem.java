@@ -55,16 +55,27 @@ public class CoinItem extends Item implements ICoinContainer {
     }
 
     public enum CoinValue {
-        ONE(1), FIVE(5), TWENTY(20), FIFTY(50), ONE_HUNDRED(100), FIVE_HUNDRED(500);
+        ONE(1, "text.wallets.coin.one"),
+        FIVE(5, "text.wallets.coin.five"),
+        TWENTY(20, "text.wallets.coin.twenty"),
+        FIFTY(50, "text.wallets.coin.fifty"),
+        ONE_HUNDRED(100, "text.wallets.coin.one_hundred"),
+        FIVE_HUNDRED(500, "text.wallets.coin.five_hundred");
 
         private final int value;
+        private final String translation;
 
-        CoinValue(int value) {
+        CoinValue(int value, String translation) {
             this.value = value;
+            this.translation = translation;
         }
 
         public int getValue() {
             return value;
+        }
+
+        public String getTranslation() {
+            return translation;
         }
     }
 

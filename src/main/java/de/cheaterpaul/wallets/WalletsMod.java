@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -57,6 +58,7 @@ public class WalletsMod
         bus.addListener(this::doClientStuff);
         ITEMS.register(bus);
         MENUS.register(bus);
+        CREATIVE_TABS.register(bus);
 
         Config.init();
     }
@@ -72,15 +74,19 @@ public class WalletsMod
     }
 
     private static CreativeModeTab createCreativeTab() {
-        return CreativeModeTab.builder().icon(() -> new ItemStack(WALLET.get())).title(Component.translatable("itemGroup." + REFERENCE.MOD_ID)).displayItems((params, output) -> {
-            output.accept(COIN_ONE.get());
-            output.accept(COIN_FIVE.get());
-            output.accept(COIN_TWENTY.get());
-            output.accept(COIN_FIFTY.get());
-            output.accept(COIN_ONE_HUNDRED.get());
-            output.accept(COIN_FIVE_HUNDRED.get());
-            output.accept(WALLET.get());
-        }).build();
+        return CreativeModeTab.builder()
+                .icon(() -> new ItemStack(WALLET.get()))
+                .title(Component.translatable("itemGroup." + REFERENCE.MOD_ID))
+                .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+                .displayItems((params, output) -> {
+                    output.accept(COIN_ONE.get());
+                    output.accept(COIN_FIVE.get());
+                    output.accept(COIN_TWENTY.get());
+                    output.accept(COIN_FIFTY.get());
+                    output.accept(COIN_ONE_HUNDRED.get());
+                    output.accept(COIN_FIVE_HUNDRED.get());
+                    output.accept(WALLET.get());
+                }).build();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

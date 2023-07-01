@@ -66,12 +66,19 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         }
         button.setTooltip(Tooltip.create(text));
 
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.TWENTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIFTY));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE_HUNDRED));
-        this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE_HUNDRED));
+        var takeOne = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 52 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE));
+        takeOne.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.ONE.getTranslation()))));
+        var takeFive = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 70 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE));
+        takeFive.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.FIVE.getTranslation()))));
+        var takeTwenty = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 88 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.TWENTY));
+        takeTwenty.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.TWENTY.getTranslation()))));
+        var takeFifty = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 106 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIFTY));
+        takeFifty.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.FIFTY.getTranslation()))));
+        var takeHundred = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 124 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE_HUNDRED));
+        takeHundred.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.ONE_HUNDRED.getTranslation()))));
+        var takeFiveHundred = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 142 + 20, this.getGuiTop() + 43, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.FIVE_HUNDRED));
+        takeFiveHundred.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.FIVE_HUNDRED.getTranslation()))));
+
         this.addRenderableWidget(new TakeButton(this.getGuiLeft() + 142 + 2, this.getGuiTop() + 16, 14, 14, 188, 0, 14, BACKGROUND, 256, 256, this::walletSumCoinsPressed, Component.empty()));
         if (!Config.CONFIG.disableCoinPouch.get()) {
             this.addRenderableWidget(new PouchButton(this.getGuiLeft() + 162, this.getGuiTop() + 16, 14, 14, 213, 0, 14, BACKGROUND, 256, 256, this::walletCreateCoinPoach, Component.empty()));

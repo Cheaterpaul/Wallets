@@ -16,5 +16,12 @@
   "item.wallets.coin_pouch": "%s Coins",
   "text.wallets.wallet_full": "Wallet is full",
   "text.wallets.take_coin_sum": "Take Sum",
-  "text.wallets.wallet_sum": "Wallet Sum"
+  "text.wallets.wallet_sum": "Wallet Sum",
+  "text.wallets.take_coin": "Take %s Coin",
+  "text.wallets.coin.one": "1",
+  "text.wallets.coin.five": "5",
+  "text.wallets.coin.twenty": "20",
+  "text.wallets.coin.fifty": "50",
+  "text.wallets.coin.one_hundred": "100",
+  "text.wallets.coin.five_hundred": "500"
 }
