@@ -43,7 +43,7 @@ public class WalletContainer extends AbstractContainerMenu {
         super(WalletsMod.WALLET_CONTAINER.get(), id);
         this.player = playerInventory.player;
         this.walletStack = stack;
-        this.inventory = new SimpleContainer(7);
+        this.inventory = new SimpleContainer(8);
         this.coinSlots = new HashMap<>();
         this.addSlots(inventory);
         this.addPlayerSlots(playerInventory);
@@ -76,10 +76,11 @@ public class WalletContainer extends AbstractContainerMenu {
         this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
         this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE, inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
         this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE, inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TWENTY, inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIFTY, inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE_HUNDRED, inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE_HUNDRED, inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TEN, inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_ten")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TWENTY, inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIFTY, inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE_HUNDRED, inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE_HUNDRED, inventory, 7, 159+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
     protected void addPlayerSlots(Inventory playerInventory) {

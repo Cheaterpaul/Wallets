@@ -57,6 +57,7 @@ public class CoinItem extends Item implements ICoinContainer {
     public enum CoinValue {
         ONE(1, "text.wallets.coin.one"),
         FIVE(5, "text.wallets.coin.five"),
+        TEN(10, "text.wallets.coin.ten"),
         TWENTY(20, "text.wallets.coin.twenty"),
         FIFTY(50, "text.wallets.coin.fifty"),
         ONE_HUNDRED(100, "text.wallets.coin.one_hundred"),

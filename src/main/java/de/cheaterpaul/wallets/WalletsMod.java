@@ -42,6 +42,7 @@ public class WalletsMod
     public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register(REFERENCE.MOD_ID, WalletsMod::createCreativeTab);
     public static final RegistryObject<CoinItem> COIN_ONE = ITEMS.register("coin_one", () -> new CoinItem(CoinItem.CoinValue.ONE, new Item.Properties()));
     public static final RegistryObject<CoinItem> COIN_FIVE = ITEMS.register("coin_five", () -> new CoinItem(CoinItem.CoinValue.FIVE, new Item.Properties()));
+    public static final RegistryObject<CoinItem> COIN_TEN = ITEMS.register("coin_ten", () -> new CoinItem(CoinItem.CoinValue.TEN, new Item.Properties()));
     public static final RegistryObject<CoinItem> COIN_TWENTY = ITEMS.register("coin_twenty", () -> new CoinItem(CoinItem.CoinValue.TWENTY, new Item.Properties()));
     public static final RegistryObject<CoinItem> COIN_FIFTY = ITEMS.register("coin_fifty", () -> new CoinItem(CoinItem.CoinValue.FIFTY, new Item.Properties()));
     public static final RegistryObject<CoinItem> COIN_ONE_HUNDRED = ITEMS.register("coin_one_hundred", () -> new CoinItem(CoinItem.CoinValue.ONE_HUNDRED, new Item.Properties()));
@@ -81,6 +82,7 @@ public class WalletsMod
                 .displayItems((params, output) -> {
                     output.accept(COIN_ONE.get());
                     output.accept(COIN_FIVE.get());
+                    output.accept(COIN_TEN.get());
                     output.accept(COIN_TWENTY.get());
                     output.accept(COIN_FIFTY.get());
                     output.accept(COIN_ONE_HUNDRED.get());
