@@ -11,15 +11,15 @@
 
 This Forge Mod adds a simple coin system. Perfect for servers.
 
-The system works in a way that there are a few different coin item (1 coin, 5 coins, 20 coins, 50 coins, 100 coins, 500 coins) as well as a wallet item that can be used to store all coins.
+The system works in a way that there are a few different coin item (1 coin, 5 coins, 10 coins, 20 coins, 50 coins, 100 coins, 500 coins) as well as a wallet item that can be used to store all coins.
 
-Interacting with the wallet opens a gui where coins or other wallets can be transferred into the opened wallet. In the gui every kind of coin can be extracted as well as a set coin value. And if that is too much you can even take a coin pile with a set amount of coins to transfer to another player or wallet.
+Interacting with the wallet opens a gui where coins or other wallets can be transferred into the opened wallet. In the gui every kind of coin can be extracted as well as a set coin value. And if that is too much you can even take a coin pouch with a set amount of coins to transfer to another player or wallet.
 
 <img alt="wallet" src="https://i.ibb.co/yygq6HR/wallets.png" width="500"/>
 
 ## Configuration
 
-- the coin pile button in the wallet screen can be disabled in the `wallets-server.toml` file in the `serverconfig` directory
+- the coin pouch button in the wallet screen can be disabled in the `wallets-server.toml` file in the `serverconfig` directory
 
 ## People
 
