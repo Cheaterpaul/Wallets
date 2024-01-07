@@ -73,25 +73,25 @@ public class WalletContainer extends AbstractContainerMenu {
     }
 
     protected void addSlots(Container inventory) {
-        this.addSlot(new CoinSlot(inventory, 0, 15, 15, (stack) -> stack.getItem() instanceof ICoinContainer));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE, inventory, 1, 51+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE, inventory, 2, 69+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TEN, inventory, 3, 87+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_ten")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TWENTY, inventory, 4, 105+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIFTY, inventory, 5, 123+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE_HUNDRED, inventory, 6, 141+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
-        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE_HUNDRED, inventory, 7, 159+20, 60,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
+        this.addSlot(new CoinSlot(inventory, 0, 118, 20, (stack) -> stack.getItem() instanceof ICoinContainer));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE, inventory, 1, 26, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE, inventory, 2, 44, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TEN, inventory, 3, 62, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_ten")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.TWENTY, inventory, 4, 80, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_twenty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIFTY, inventory, 5, 98, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_fifty")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.ONE_HUNDRED, inventory, 6, 116, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_one_hundred")));
+        this.addSlot(new TakeOnlySlot(CoinItem.CoinValue.FIVE_HUNDRED, inventory, 7, 134, 70,new ResourceLocation(REFERENCE.MOD_ID,"item/coin_five_hundred")));
     }
 
     protected void addPlayerSlots(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 6+8 + j * 18, 95 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 128 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new WalletSafeSlot(playerInventory, k, 6+8 + k * 18, 153));
+            this.addSlot(new WalletSafeSlot(playerInventory, k, 8 + k * 18, 186));
         }
     }
 
