@@ -25,5 +25,8 @@
   "text.wallets.coin.twenty": "20",
   "text.wallets.coin.fifty": "50",
   "text.wallets.coin.one_hundred": "100",
-  "text.wallets.coin.five_hundred": "500"
+  "text.wallets.coin.five_hundred": "500",
+  "text.wallets.balance": "Balance",
+  "text.wallets.deposit": "Deposit",
+  "text.wallets.withdraw": "Withdraw"
 }
