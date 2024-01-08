@@ -1,6 +1,6 @@
 ![wallets-title](https://i.ibb.co/gv31kdt/wallets-title.png)
 
-# Wallets for Minecraft 1.16 - Forge
+# Wallets for Minecraft Forge
 
 [![](https://cf.way2muchnoise.eu/short_534011_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/wallets)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
@@ -15,7 +15,7 @@ The system works in a way that there are a few different coin item (1 coin, 5 co
 
 Interacting with the wallet opens a gui where coins or other wallets can be transferred into the opened wallet. In the gui every kind of coin can be extracted as well as a set coin value. And if that is too much you can even take a coin pouch with a set amount of coins to transfer to another player or wallet.
 
-<img alt="wallet" src="https://i.ibb.co/yygq6HR/wallets.png" width="500"/>
+<img alt="wallet" src="https://i.ibb.co/QCCz8Rc/wallets.png" width="500"/>
 
 ## Configuration
 
@@ -24,8 +24,9 @@ Interacting with the wallet opens a gui where coins or other wallets can be tran
 ## People
 
 - [Cheaterpaul](https://paube.de) Coding
-- [1LiterZinalco](https://github.com/1LiterZinalco) Idea
-- Random Textures
+- [lunofe](https://github.com/lunofe) Idea
+- Random2325 Textures
+- [GridExpert](https://github.com/TheGridExpert) Textures
 
 ## Links
 
