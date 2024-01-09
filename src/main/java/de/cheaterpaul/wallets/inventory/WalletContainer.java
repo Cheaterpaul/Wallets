@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 
 public class WalletContainer extends AbstractContainerMenu {
 
-    protected final Container inventory;
+    protected final SimpleContainer inventory;
     private final ItemStack walletStack;
     private int walletAmount;
     private int walletPos;
@@ -51,6 +51,10 @@ public class WalletContainer extends AbstractContainerMenu {
         if (!player.level().isClientSide) {
             this.walletPos = playerInventory.findSlotMatchingUnusedItem(stack);
         }
+    }
+
+    public SimpleContainer getInventory() {
+        return inventory;
     }
 
     @Override

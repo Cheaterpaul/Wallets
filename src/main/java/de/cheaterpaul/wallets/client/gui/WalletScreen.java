@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +40,7 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
 
     private EditBox sumField;
     private EditBox walletSum;
+    private ImageButton depositButton;
 
     public WalletScreen(WalletContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -49,24 +49,14 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         this.inventoryLabelY = this.imageHeight - 94;
         this.inventoryLabelX = 8;
         this.menu.listen(this);
+        this.menu.getInventory().addListener(container1 -> updateDepositButton());
     }
 
     @Override
     protected void init() {
         super.init();
-        ImageButton button = new ImageButton(this.getGuiLeft() + 104, this.getGuiTop() + 23, 7, 11, 190, 0, 11, BACKGROUND, 256, 256, this::walletApplyPressed);
-        this.addRenderableWidget(button);
-        ItemStack itemstack = menu.slots.get(0).container.getItem(0);
-        int amount = 0;
-        if (itemstack.getItem() instanceof ICoinContainer) {
-            amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
-        }
-        Component text = Component.translatable("text.wallets.transfer", amount);
-        if (menu.getWalletAmount() + amount > 999999999) {
-            text = Component.translatable("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
-        }
-        button.setTooltip(Tooltip.create(text));
-
+        this.depositButton = this.addRenderableWidget(new ImageButton(this.getGuiLeft() + 104, this.getGuiTop() + 23, 7, 11, 190, 0, 11, BACKGROUND, 256, 256, this::walletApplyPressed));
+        this.updateDepositButton();
 
         var takeOne = this.addRenderableWidget(new AddWalletButton(this.getGuiLeft() + 27, this.getGuiTop() + 53, 14, 14, 176, 0, 14, BACKGROUND, 256, 256, this::walletTakeCoinPressed, Component.empty(), CoinItem.CoinValue.ONE));
         takeOne.setTooltip(Tooltip.create(Component.translatable("text.wallets.take_coin", Component.translatable(CoinItem.CoinValue.ONE.getTranslation()))));
@@ -100,6 +90,19 @@ public class WalletScreen extends AbstractContainerScreen<WalletContainer> imple
         this.walletSum.setTextColorUneditable(14737632);
         this.walletSum.setValue(String.valueOf(this.menu.getWalletAmount()));
         this.addWidget(this.walletSum);
+    }
+
+    private void updateDepositButton() {
+        ItemStack itemstack = menu.slots.get(0).container.getItem(0);
+        int amount = 0;
+        if (itemstack.getItem() instanceof ICoinContainer) {
+            amount = ((ICoinContainer) itemstack.getItem()).getCoins(itemstack);
+        }
+        Component text = Component.translatable("text.wallets.transfer", amount);
+        if (menu.getWalletAmount() + amount > 999999999) {
+            text = Component.translatable("text.wallets.wallet_full").withStyle(ChatFormatting.RED);
+        }
+        this.depositButton.setTooltip(Tooltip.create(text));
     }
 
     @Override
