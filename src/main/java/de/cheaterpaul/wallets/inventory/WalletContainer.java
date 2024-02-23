@@ -160,8 +160,8 @@ public class WalletContainer extends AbstractContainerMenu {
     }
 
     public void updateClient() {
-        if (!(this.player instanceof ServerPlayer)) return;
-        WalletsMod.dispatcher.sentToPlayer(new UpdateWalletPacket(this.walletAmount, this.walletPos), ((ServerPlayer) this.player));
+        if (!(this.player instanceof ServerPlayer serverPlayer)) return;
+        serverPlayer.connection.send(new UpdateWalletPacket(this.walletAmount, this.walletPos));
     }
 
     public void takeCoin(CoinItem.CoinValue value) {
@@ -236,11 +236,15 @@ public class WalletContainer extends AbstractContainerMenu {
     }
 
     public void update(UpdateWalletPacket msg) {
-        this.walletAmount = msg.walletAmount;
-        this.walletPos = msg.walletPos;
+        this.walletAmount = msg.walletAmount();
+        this.walletPos = msg.walletPos();
         if (this.changeListener != null) {
             this.changeListener.coinsChanged();
         }
+    }
+
+    public int getWalletPos() {
+        return walletPos;
     }
 
     public class WalletSafeSlot extends Slot {

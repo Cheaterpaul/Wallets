@@ -1,40 +1,35 @@
 package de.cheaterpaul.wallets.network;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class UpdateWalletPacket {
+public record UpdateWalletPacket(int walletAmount, int walletPos) implements CustomPacketPayload {
 
-    public final int walletAmount;
-    public final int walletPos;
+    public static final ResourceLocation ID = new ResourceLocation(REFERENCE.MOD_ID, "update_wallet");
+    public static final Codec<UpdateWalletPacket> CODEC = RecordCodecBuilder.create(inst ->
+            inst.group(
+                    Codec.INT.fieldOf("walletAmount").forGetter(UpdateWalletPacket::walletAmount),
+                    Codec.INT.fieldOf("walletPos").forGetter(UpdateWalletPacket::walletPos)
+            ).apply(inst, UpdateWalletPacket::new)
+    );
 
-    public UpdateWalletPacket(int walletAmount, int walletPos) {
-        this.walletAmount = walletAmount;
-        this.walletPos = walletPos;
+    @Override
+    public void write(FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeJsonWithCodec(CODEC, this);
     }
 
-    static void encode(UpdateWalletPacket msg, FriendlyByteBuf buf) {
-        buf.writeVarInt(msg.walletAmount);
-        buf.writeVarInt(msg.walletPos);
-    }
-
-    static UpdateWalletPacket decode(FriendlyByteBuf buf) {
-        return new UpdateWalletPacket(buf.readVarInt(), buf.readVarInt());
-    }
-
-    public static void handle(final UpdateWalletPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        final NetworkEvent.Context ctx = contextSupplier.get();
-        ctx.enqueueWork(() -> {
-            AbstractContainerMenu menu = Minecraft.getInstance().player.containerMenu;;
-            if (menu instanceof WalletContainer) {
-                ((WalletContainer) menu).update(msg);
-            }
-        });
-        ctx.setPacketHandled(true);
+    @Override
+    public @NotNull ResourceLocation id() {
+        return ID;
     }
 }

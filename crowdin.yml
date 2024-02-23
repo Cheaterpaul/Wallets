@@ -1,5 +1,13 @@
+project_id: "492617"
+api_token_env: CROWDIN_KEY
+base_path: "."
+base_url: "https://api.crowdin.com"
+
 preserve_hierarchy: true
-files:
-  - source: /src/main/resources/assets/wallets/lang/en_us.json
-    translation: /src/main/resources/assets/wallets/lang/%locale_with_underscore%.json
-    dest: /src/main/resources/assets/wallets/lang/%file_name%.json
+files: [
+  {
+    source: "/src/main/resources/assets/wallets/lang/en_us.json",
+    translation: "/src/main/resources/assets/wallets/lang/%locale_with_underscore%.json",
+    dest: "translations.json"
+  }
+]

@@ -1,25 +1,26 @@
 package de.cheaterpaul.wallets.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import com.electronwill.nightconfig.core.ConfigSpec;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Config {
 
     public static final Config CONFIG;
 
-    private static final ForgeConfigSpec configSpec;
+    private static final ModConfigSpec configSpec;
 
     static {
-        final Pair<Config, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config::new);
+        final Pair<Config, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Config::new);
         CONFIG = specPair.getKey();
         configSpec = specPair.getValue();
     }
 
-    public final ForgeConfigSpec.BooleanValue disableCoinPouch;
+    public final ModConfigSpec.BooleanValue disableCoinPouch;
 
-    public Config(ForgeConfigSpec.Builder builder) {
+    public Config(ModConfigSpec.Builder builder) {
         this.disableCoinPouch = builder.comment("disable create coin pouch button").define("disableCoinPouch", false);
     }
 

@@ -2,10 +2,12 @@ package de.cheaterpaul.wallets.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,20 +56,22 @@ public class CoinItem extends Item implements ICoinContainer {
         return false;
     }
 
-    public enum CoinValue {
-        ONE(1, "text.wallets.coin.one"),
-        FIVE(5, "text.wallets.coin.five"),
-        TEN(10, "text.wallets.coin.ten"),
-        TWENTY(20, "text.wallets.coin.twenty"),
-        FIFTY(50, "text.wallets.coin.fifty"),
-        ONE_HUNDRED(100, "text.wallets.coin.one_hundred"),
-        FIVE_HUNDRED(500, "text.wallets.coin.five_hundred");
+    public enum CoinValue implements StringRepresentable {
+        ONE(1, "one", "text.wallets.coin.one"),
+        FIVE(5, "five", "text.wallets.coin.five"),
+        TEN(10, "ten", "text.wallets.coin.ten"),
+        TWENTY(20, "twenty", "text.wallets.coin.twenty"),
+        FIFTY(50, "fifty", "text.wallets.coin.fifty"),
+        ONE_HUNDRED(100, "one_hundred", "text.wallets.coin.one_hundred"),
+        FIVE_HUNDRED(500, "five_hundred", "text.wallets.coin.five_hundred");
 
         private final int value;
+        private final String serializedName;
         private final String translation;
 
-        CoinValue(int value, String translation) {
+        CoinValue(int value, String serializedName, String translation) {
             this.value = value;
+            this.serializedName = serializedName;
             this.translation = translation;
         }
 
@@ -77,6 +81,11 @@ public class CoinItem extends Item implements ICoinContainer {
 
         public String getTranslation() {
             return translation;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return this.serializedName;
         }
     }
 

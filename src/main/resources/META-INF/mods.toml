@@ -1,28 +1,26 @@
 modLoader="javafml"
-loaderVersion="[46,)"
-license="LGPL-3.0"
-issueTrackerURL = "https://github.com/Cheaterpaul/Wallets/issues"
+loaderVersion= "${loader_version_range}"
+license= "${mod_license}"
+issueTrackerURL = "${mod_issue_tracker_url}"
 [[mods]]
-modId="wallets"
-version="${version}"
-displayName="Wallets"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 logoFile="logo.png"
 authors="Cheaterpaul, 1LiterZinalco"
-credits="Random (textures)"
-description='''
-This mod add 2 item:
-
-Coins of different value and a wallet to store coins easily.
-'''
-[[dependencies.wallets]]
-    modId="forge"
-    mandatory=true
-    versionRange="[${forge_version},)"
+credits='''\n
+- Random (textures)
+- Grid (textures)'''
+description='''${mod_description}'''
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
-[[dependencies.wallets]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[${mc_version},)"
+    type="required"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"

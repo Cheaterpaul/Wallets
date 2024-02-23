@@ -1,34 +1,48 @@
-name: Crowdin Upload
+name: Upload lang keys to Crowdin
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 1.16
-      - 1.18
-      - 1.19
+      - '1.[0-9]+'
+      - '1.[0-9]+.[0-9]+'
     paths:
       - 'src/main/resources/assets/wallets/lang/en_us.json'
 
 jobs:
-  upload-source-files:
-    name: Upload Source Files
+  upload-translations:
+    environment: Testing
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Crowdin Upload
-        uses: crowdin/github-action@1.4.14
+      - uses: actions/checkout@v4
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
         with:
-          upload_sources: true
-          upload_language: 'en'
-          auto_approve_imported: true
-          add_crowdin_branch: ${{ github.ref_name }}
-          crowdin_branch_name: ${{ github.ref_name }}
-          config: ./crowdin.yml
-          project_id: 492617
-          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Determine Crowdin branch
+        id: get_crowdin_branch
+        run: |
+          output=$(./gradlew crowdinBranch)
+          version=$(echo "$output" | grep -oP 'Crowdin branch: \K\d+\.\d+')
+          if [[ $version =~ ^1\.[0-9]+$ ]]; then
+            echo "Crowdin branch: $version"
+            echo "crowdin_branch=$version" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid version: $version"
+            exit 1
+          fi
+      - name: Upload translation keys
+        uses: crowdin/github-action@v1
+        with:
+          crowdin_branch_name: ${{ steps.get_crowdin_branch.outputs.crowdin_branch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CROWDIN_PROJECT_ID: walletsmc
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_KEY: ${{ secrets.CROWDIN_KEY }}
+      - name: Install Crowdin CLI
+        run: npm i -g @crowdin/cli
+      - name: Pre-translate
+        run: crowdin pre-translate -b ${{ steps.get_crowdin_branch.outputs.crowdin_branch }} --translate-with-perfect-match-only --translate-untranslated-only --method=tm
+        env:
+          CROWDIN_KEY: ${{ secrets.CROWDIN_KEY }}

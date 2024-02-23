@@ -1,42 +1,39 @@
 package de.cheaterpaul.wallets.network;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.cheaterpaul.wallets.REFERENCE;
 import de.cheaterpaul.wallets.inventory.WalletContainer;
 import de.cheaterpaul.wallets.items.CoinItem;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class TakeCoinPacket {
 
-    private final CoinItem.CoinValue type;
-    private final int amount;
+public record TakeCoinPacket(CoinItem.CoinValue type, int amount) implements CustomPacketPayload {
 
-    public TakeCoinPacket(CoinItem.CoinValue type, int amount) {
-        this.type = type;
-        this.amount = amount;
+    public static final ResourceLocation ID = new ResourceLocation(REFERENCE.MOD_ID, "take_coin");
+    public static final Codec<TakeCoinPacket> CODEC = RecordCodecBuilder.create(inst ->
+            inst.group(
+                    StringRepresentable.fromEnum(CoinItem.CoinValue::values).fieldOf("type").forGetter(TakeCoinPacket::type),
+                    Codec.INT.fieldOf("amount").forGetter(TakeCoinPacket::amount)
+            ).apply(inst, TakeCoinPacket::new)
+    );
+
+    @Override
+    public void write(FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeJsonWithCodec(CODEC, this);
     }
 
-    static void encode(TakeCoinPacket msg, FriendlyByteBuf buf) {
-        buf.writeInt(msg.type.ordinal());
-        buf.writeInt(msg.amount);
+    @Override
+    public @NotNull ResourceLocation id() {
+        return ID;
     }
 
-    static TakeCoinPacket decode(FriendlyByteBuf buf) {
-        return new TakeCoinPacket(CoinItem.CoinValue.values()[buf.readInt()], buf.readInt());
-    }
-
-    public static void handle(final TakeCoinPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        final NetworkEvent.Context ctx = contextSupplier.get();
-        ctx.enqueueWork(() -> {
-            ServerPlayer player = ctx.getSender();
-            AbstractContainerMenu menu = player.containerMenu;
-            if (menu instanceof WalletContainer) {
-                ((WalletContainer) menu).takeCoin(msg.type, msg.amount);
-            }
-        });
-        ctx.setPacketHandled(true);
-    }
 }

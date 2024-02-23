@@ -1,6 +1,7 @@
 package de.cheaterpaul.wallets.items;
 
 import de.cheaterpaul.wallets.inventory.WalletContainer;
+import de.cheaterpaul.wallets.network.UpdateWalletPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,10 +13,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.OptionalInt;
 
 public class WalletItem extends Item implements ICoinContainer {
 
@@ -26,8 +27,11 @@ public class WalletItem extends Item implements ICoinContainer {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (player instanceof ServerPlayer) {
-            NetworkHooks.openScreen(((ServerPlayer) player), new SimpleMenuProvider((id, playerInv, ply) -> new WalletContainer(id, playerInv, stack), Component.translatable("container.wallets.wallet")));
+        if (player instanceof ServerPlayer serverPlayer) {
+            OptionalInt optionalInt = player.openMenu(new SimpleMenuProvider((id, playerInv, ply) -> new WalletContainer(id, playerInv, stack), Component.translatable("container.wallets.wallet")));
+            if (optionalInt.isPresent() &&  serverPlayer.containerMenu instanceof WalletContainer wallet) {
+                serverPlayer.connection.send(new UpdateWalletPacket(wallet.getWalletAmount(), wallet.getWalletPos()));
+            }
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
